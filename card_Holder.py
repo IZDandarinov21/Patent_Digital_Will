@@ -1,6 +1,6 @@
-# cardHolder.py
+# card_Holder.py
 
-class CardHolder:
+class Card_Holder:
     def __init__(self, cardNum, pin, firstName, lastName, balance):
         self.cardNum = cardNum
         self.pin = pin
