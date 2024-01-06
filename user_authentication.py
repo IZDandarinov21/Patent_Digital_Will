@@ -4,12 +4,13 @@ from card_Holder import Card_Holder
 
 def authenticate_user():
     list_of_card_holders = [
-        Card_Holder("127631386428723472989", 1232, "John", "Petterson", 150.31),
-        Card_Holder("885493957439598989345", 4354, "Max", "Ovley", 546.21),
+        Card_Holder("127631386428723472989", 1232, "Atanas", "Apostolov", 150.31),
+        Card_Holder("885493957439598989345", 4354, "Ivaila", "Kuzmova", 546.21),
         Card_Holder("989549443243424324767", 8773, "Anakin", "Jeferson", 89.43),
         Card_Holder("329392934920194839238", 9731, "Anna", "Karalian", 234.67),
         Card_Holder("124214273889959040032", 2289, "Dawn", "Smith", 743.56)
     ]
+
 
     while True:
         try:
@@ -32,3 +33,13 @@ def get_user_pin(current_user):
                 print("Invalid PIN. Please try again.")
         except:
             print("Invalid PIN. Please try again.")
+
+def get_user_by_names(first_name, last_name, card_number, card_holders_list):
+    matches = [
+        holder for holder in card_holders_list
+        if holder.get_firstName().lower() == first_name.lower()
+        and holder.get_lastName().lower() == last_name.lower()
+        and holder.get_cardNum() == card_number
+    ]
+
+    return matches[0] if matches else None
