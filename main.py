@@ -1,10 +1,12 @@
 # main.py
 
 from bank_operations import print_menu, deposit, withdrawal, check_balance, transfer
-from user_authentication import authenticate_user, get_user_pin
+from user_authentication import authenticate_user, get_user_pin, load_card_holders_from_json
 
 def main():
-    current_user = authenticate_user()
+    list_of_card_holders = load_card_holders_from_json('card_holders.json')
+
+    current_user = authenticate_user(list_of_card_holders)
 
     if get_user_pin(current_user):
         print("Welcome ", current_user.get_firstName(), " :)")
@@ -18,21 +20,20 @@ def main():
             continue
 
         if option == 1:
-            deposit(current_user)
+            deposit(current_user, list_of_card_holders)
         elif option == 2:
-            withdrawal(current_user)
+            withdrawal(current_user, list_of_card_holders)
         elif option == 3:
             check_balance(current_user)
         elif option == 4:
-            transfer(current_user)
+            transfer(current_user, list_of_card_holders)
         elif option == 5:
             print("Thank you for choosing us!")
             break
         else:
             print("Invalid option. Please try again.")
 
-    print("Thank you for . Have a nice day :)")
-
+    print("Thank you for choosing us. Have a nice day :)")
 
 if __name__ == "__main__":
     main()

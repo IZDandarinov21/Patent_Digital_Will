@@ -1,27 +1,57 @@
 # user_authentication.py
-
+import json
 from card_Holder import Card_Holder
 
-def authenticate_user():
-    list_of_card_holders = [
-        Card_Holder("127631386428723472989", 1232, "Atanas", "Apostolov", 150.31),
-        Card_Holder("885493957439598989345", 4354, "Ivaila", "Kuzmova", 546.21),
-        Card_Holder("989549443243424324767", 8773, "Anakin", "Jeferson", 89.43),
-        Card_Holder("329392934920194839238", 9731, "Anna", "Karalian", 234.67),
-        Card_Holder("124214273889959040032", 2289, "Dawn", "Smith", 743.56)
-    ]
-
-
+def authenticate_user(card_holders_list):
     while True:
         try:
-            debit_card_num = input("Please insert your debit card: ")
-            debit_match = [holder for holder in list_of_card_holders if holder.cardNum == debit_card_num]
-            if len(debit_match) > 0:
-                return debit_match[0]
+            debit_card_num = input("Please insert your debit card number: ")
+
+            matched_users = [holder for holder in card_holders_list if
+                             holder.get_cardNum() == debit_card_num]
+
+            if len(matched_users) > 0:
+                return matched_users[0]
             else:
-                print("Card number not recognized. Please try again.")
-        except:
-            print("Card number not recognized. Please try again.")
+                print("Invalid card number or PIN. Please try again.")
+        except ValueError:
+            print("Invalid input. Please enter a valid card number and PIN.")
+        except IndexError:
+            print("Invalid card number or PIN. Please try again.")
+
+# ...
+
+def load_card_holders_from_json(filename):
+    try:
+        with open(filename, 'r') as file:
+            card_holders_data = json.load(file)
+            card_holders = [
+                Card_Holder(
+                    data['cardNum'],
+                    data['pin'],
+                    data['firstName'],
+                    data['lastName'],
+                    data['balance']
+                )
+                for data in card_holders_data
+            ]
+            return card_holders
+    except (FileNotFoundError, json.JSONDecodeError):
+        return []
+
+def save_card_holders_to_json(card_holders, filename):
+    card_holders_data = [
+        {
+            'cardNum': holder.get_cardNum(),
+            'pin': holder.get_pin(),
+            'firstName': holder.get_firstName(),
+            'lastName': holder.get_lastName(),
+            'balance': holder.get_balance()
+        }
+        for holder in card_holders
+    ]
+    with open(filename, 'w') as file:
+        json.dump(card_holders_data, file)
 
 def get_user_pin(current_user):
     while True:
@@ -35,11 +65,15 @@ def get_user_pin(current_user):
             print("Invalid PIN. Please try again.")
 
 def get_user_by_names(first_name, last_name, card_number, card_holders_list):
-    matches = [
-        holder for holder in card_holders_list
-        if holder.get_firstName().lower() == first_name.lower()
-        and holder.get_lastName().lower() == last_name.lower()
-        and holder.get_cardNum() == card_number
-    ]
+    for holder in card_holders_list:
+        print(f"Checking {holder.get_firstName()} {holder.get_lastName()} with card number {holder.get_cardNum()}")
+        if (
+            holder.get_firstName().lower() == first_name.lower()
+            and holder.get_lastName().lower() == last_name.lower()
+            and holder.get_cardNum() == card_number
+        ):
+            print("Match found!")
+            return holder
 
-    return matches[0] if matches else None
+    print("No match found.")
+    return None
