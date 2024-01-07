@@ -62,13 +62,13 @@ def change_user_info(current_user, list_of_card_holders):
         choice = int(input("Enter your choice (1-3): ").strip())
 
         if choice == 1:
-            new_value = input("Enter your new first name: ").strip()[:14]  # Limit to 14 characters
+            new_value = input("Enter your new first name: ").strip()  # Limit to 10 characters
             if len(new_value) > 10:
                 print("Invalid name length. Maximum length is 10 characters. Please try again.")
                 return
             current_user.set_firstName(new_value)
         elif choice == 2:
-            new_value = input("Enter your new last name: ").strip()[:14]  # Limit to 14 characters
+            new_value = input("Enter your new last name: ").strip()  # Limit to 10 characters
             if len(new_value) > 10:
                 print("Invalid name length. Maximum length is 10 characters. Please try again.")
                 return
