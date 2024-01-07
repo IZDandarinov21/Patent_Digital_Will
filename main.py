@@ -1,6 +1,6 @@
 # main.py
 
-from bank_operations import print_menu, deposit, withdrawal, check_balance, transfer
+from bank_operations import print_menu, deposit, withdrawal, check_balance, transfer, change_user_info
 from user_authentication import authenticate_user, get_user_pin, load_card_holders_from_json
 
 def main():
@@ -28,12 +28,14 @@ def main():
         elif option == 4:
             transfer(current_user, list_of_card_holders)
         elif option == 5:
+            change_user_info(current_user, list_of_card_holders)
+        elif option == 6:
             print("Thank you for choosing us!")
             break
         else:
             print("Invalid option. Please try again.")
 
-    print("Thank you for choosing us. Have a nice day :)")
+    print("Have a nice day :)")
 
 if __name__ == "__main__":
     main()

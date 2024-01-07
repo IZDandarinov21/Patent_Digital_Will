@@ -1,13 +1,15 @@
 # bank_operations.py
+
 from user_authentication import get_user_by_names, save_card_holders_to_json
 
 def print_menu():
     print("Please choose from one of the following options...")
     print("1. Deposit")
     print("2. Withdrawal")
-    print("3. Show balance")
+    print("3. Show Balance")
     print("4. Transfer")
-    print("5. Exit")
+    print("5. Change User Information")
+    print("6. Exit")
 
 def deposit(card_holder, list_of_card_holders):
     try:
@@ -30,7 +32,7 @@ def withdrawal(card_holder, list_of_card_holders):
         else:
             card_holder.set_balance(card_holder.get_balance() - withdrawal_amount)
             card_holder.add_to_history("Withdrawal", withdrawal_amount)
-            print("You're good to go! Thank you :)")
+            print("You're good to go! Thank you :) Your balance is: ", str(card_holder.get_balance()))
 
             # Save updated data to JSON file after withdrawal
             save_card_holders_to_json(list_of_card_holders, 'card_holders.json')
@@ -48,6 +50,48 @@ def check_balance(card_holder):
     for transaction in card_holder.get_transaction_history():
         if transaction[0] == "Withdrawal":
             print(transaction)
+
+
+def change_user_info(current_user, list_of_card_holders):
+    print("Select what you want to change:")
+    print("1. First Name")
+    print("2. Last Name")
+    print("3. PIN")
+
+    try:
+        choice = int(input("Enter your choice (1-3): ").strip())
+
+        if choice == 1:
+            new_value = input("Enter your new first name: ").strip()[:14]  # Limit to 14 characters
+            if len(new_value) > 10:
+                print("Invalid name length. Maximum length is 10 characters. Please try again.")
+                return
+            current_user.set_firstName(new_value)
+        elif choice == 2:
+            new_value = input("Enter your new last name: ").strip()[:14]  # Limit to 14 characters
+            if len(new_value) > 10:
+                print("Invalid name length. Maximum length is 10 characters. Please try again.")
+                return
+            current_user.set_lastName(new_value)
+        elif choice == 3:
+            new_value = int(input("Enter your new PIN: ").strip())
+            # Check if the new PIN is exactly 4 digits
+            if 1000 <= new_value <= 9999:
+                current_user.set_pin(new_value)
+            else:
+                print("Invalid PIN. Please enter a 4-digit PIN.")
+                return
+        else:
+            print("Invalid choice. Please enter a number between 1 and 3.")
+            return
+
+        print("User information changed successfully!")
+
+        # Save updated data to JSON file after changing user info
+        save_card_holders_to_json(list_of_card_holders, 'card_holders.json')
+
+    except ValueError:
+        print("Invalid input. Please enter valid information.")
 
 
 def transfer(current_user, list_of_card_holders):

@@ -1,4 +1,5 @@
 # user_authentication.py
+
 import json
 from card_Holder import Card_Holder
 
@@ -56,7 +57,7 @@ def save_card_holders_to_json(card_holders, filename):
 def get_user_pin(current_user):
     while True:
         try:
-            user_pin = int(input("Please enter your pin: ").strip())
+            user_pin = int(input("Please enter your PIN: ").strip())
             if current_user.get_pin() == user_pin:
                 return True
             else:
