@@ -1,6 +1,6 @@
 # bank_operations.py
-from user_authentication import get_user_by_names
-from card_Holder import Card_Holder
+from user_authentication import get_user_by_names, save_card_holders_to_json
+
 def print_menu():
     print("Please choose from one of the following options...")
     print("1. Deposit")
@@ -9,16 +9,20 @@ def print_menu():
     print("4. Transfer")
     print("5. Exit")
 
-def deposit(card_holder):
+def deposit(card_holder, list_of_card_holders):
     try:
         deposit_amount = float(input("How much do you like to deposit: "))
         card_holder.set_balance(card_holder.get_balance() + deposit_amount)
         card_holder.add_to_history("Deposit", deposit_amount)
         print("Thank you for your money. Your balance is: ", str(card_holder.get_balance()))
-    except:
+
+        # Save updated data to JSON file after deposit
+        save_card_holders_to_json(list_of_card_holders, 'card_holders.json')
+
+    except ValueError:
         print("Invalid input")
 
-def withdrawal(card_holder):
+def withdrawal(card_holder, list_of_card_holders):
     try:
         withdrawal_amount = float(input("How much do you like to withdrawal: "))
         if card_holder.get_balance() < withdrawal_amount:
@@ -27,7 +31,11 @@ def withdrawal(card_holder):
             card_holder.set_balance(card_holder.get_balance() - withdrawal_amount)
             card_holder.add_to_history("Withdrawal", withdrawal_amount)
             print("You're good to go! Thank you :)")
-    except:
+
+            # Save updated data to JSON file after withdrawal
+            save_card_holders_to_json(list_of_card_holders, 'card_holders.json')
+
+    except ValueError:
         print("Invalid input")
 
 def check_balance(card_holder):
@@ -42,15 +50,7 @@ def check_balance(card_holder):
             print(transaction)
 
 
-def transfer(current_user):
-    list_of_card_holders = [
-        Card_Holder("127631386428723472989", 1232, "Atanas", "Apostolov", 150.31),
-        Card_Holder("885493957439598989345", 4354, "Ivaila", "Kuzmova", 546.21),
-        Card_Holder("989549443243424324767", 8773, "Anakin", "Jeferson", 89.43),
-        Card_Holder("329392934920194839238", 9731, "Anna", "Karalian", 234.67),
-        Card_Holder("124214273889959040032", 2289, "Dawn", "Smith", 743.56)
-    ]
-
+def transfer(current_user, list_of_card_holders):
     print("Enter sender's information:")
     sender_first_name = input("Sender's first name: ")
     sender_last_name = input("Sender's last name: ")
@@ -96,6 +96,9 @@ def transfer(current_user):
     print("Transfer successful!")
     print(f"Sender's balance: {sender.get_balance()}")
     print(f"Receiver's balance: {receiver.get_balance()}")
+
+    # Save updated data to JSON file when modifying something
+    save_card_holders_to_json(list_of_card_holders, 'card_holders.json')
 
 
 
