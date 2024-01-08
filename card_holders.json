@@ -1,1 +1,9 @@
-[{"cardNum": "127631386428723472989", "pin": 1304, "firstName": "Atanas", "lastName": "Apostolov", "balance": 230.0}, {"cardNum": "885493957439598989345", "pin": 4354, "firstName": "Ivaila", "lastName": "Kuzmova", "balance": 436.52}, {"cardNum": "989549443243424324767", "pin": 8773, "firstName": "Anakin", "lastName": "Jeferson", "balance": 89.43}, {"cardNum": "329392934920194839238", "pin": 9731, "firstName": "Anna", "lastName": "Karalian", "balance": 234.67}, {"cardNum": "124214273889959040032", "pin": 2289, "firstName": "Dawn", "lastName": "Smith", "balance": 743.56}]
+[
+  {
+    "cardNum": "885493957439598989345",
+    "pin": 4354,
+    "firstName": "Ivaila",
+    "lastName": "Kuzmova",
+    "balance": 1480.6200000000001
+  }
+]

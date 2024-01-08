@@ -9,7 +9,8 @@ def print_menu():
     print("3. Show Balance")
     print("4. Transfer")
     print("5. Change User Information")
-    print("6. Exit")
+    print("6. Close Account")
+    print("7. Exit")
 
 def deposit(card_holder, list_of_card_holders):
     try:
@@ -144,7 +145,82 @@ def transfer(current_user, list_of_card_holders):
     # Save updated data to JSON file when modifying something
     save_card_holders_to_json(list_of_card_holders, 'card_holders.json')
 
+def close_account(current_user, card_holders_list):
+    print("Closing your account...")
 
+    # Ask the user how they want to handle the remaining balance
+    print("Choose an option:")
+    print("1. Withdraw the remaining balance")
+    print("2. Transfer the remaining balance to another account")
+
+    try:
+        choice = int(input("Enter your choice (1-2): ").strip())
+
+        if choice == 1:
+            # Automatically withdraw all of the remaining balance
+
+            print("Warning: Choosing to withdraw will remove all of your money from your account.")
+            confirm = input("Are you sure you want to proceed? (yes/no): ").strip().lower()
+
+            if confirm == "yes":
+                withdrawal_amount = current_user.get_balance()
+                current_user.set_balance(0)
+                current_user.add_to_history("Account Closure - Withdrawal", withdrawal_amount)
+                print(f"Withdrawn {withdrawal_amount} from your account. Account closed successfully.")
+            else:
+                print("Withdraw canceled. Account closure canceled.")
+                return
+
+        elif choice == 2:
+            print("Warning: Choosing to transfer will remove all of your money from your account.")
+            confirm = input("Are you sure you want to proceed? (yes/no): ").strip().lower()
+
+            if confirm == "yes":
+                # Call the transfer_for_closing_account function to handle the transfer
+                transfer_for_closing_account(current_user, card_holders_list)
+            else:
+                print("Transfer canceled. Account closure canceled.")
+                return
+        else:
+            print("Invalid choice. Account closure canceled.")
+            return
+
+        # Remove the user from the list of cardholders
+        card_holders_list.remove(current_user)
+
+        # Save the updated list to the JSON file
+        save_card_holders_to_json(card_holders_list, 'card_holders.json')
+
+    except ValueError:
+        print("Invalid input. Please enter a valid choice.")
+
+
+def transfer_for_closing_account(sender, list_of_card_holders):
+    print("Enter receiver's information:")
+    receiver_first_name = input("Receiver's first name: ")
+    receiver_last_name = input("Receiver's last name: ")
+    receiver_card_num = input("Receiver's card number: ")
+
+    receiver = get_user_by_names(receiver_first_name, receiver_last_name, receiver_card_num, list_of_card_holders)
+
+    if receiver is None:
+        print(f"Receiver {receiver_first_name} {receiver_last_name} not found in the list of card holders.")
+        return
+
+    # Transfer all of the sender's money to the receiver
+    amount = sender.get_balance()
+    sender.set_balance(0)
+
+    sender.add_to_history(f"Transfer to {receiver.get_firstName()} {receiver.get_lastName()}", amount)
+    receiver_balance = receiver.get_balance()
+    receiver.set_balance(receiver_balance + amount)
+    receiver.add_to_history(f"Received from {sender.get_firstName()} {sender.get_lastName()}", amount)
+
+    print("Transfer successful!")
+    print(f"Sender's balance: {sender.get_balance()}")
+    print(f"Receiver's balance: {receiver.get_balance()}")
+
+    save_card_holders_to_json(list_of_card_holders, 'card_holders.json')
 
 
 
