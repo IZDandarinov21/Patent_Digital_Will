@@ -39,7 +39,7 @@ def main():
         else:
             print("Invalid option. Please try again.")
 
-    print("Have a nice day :)")
+        print("Have a nice day :)")
 
 if __name__ == "__main__":
     main()
