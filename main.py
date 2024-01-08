@@ -1,6 +1,6 @@
 # main.py
 
-from bank_operations import print_menu, deposit, withdrawal, check_balance, transfer, change_user_info
+from bank_operations import print_menu, deposit, withdrawal, check_balance, transfer, change_user_info, close_account
 from user_authentication import authenticate_user, get_user_pin, load_card_holders_from_json
 
 def main():
@@ -30,7 +30,11 @@ def main():
         elif option == 5:
             change_user_info(current_user, list_of_card_holders)
         elif option == 6:
+            close_account(current_user, list_of_card_holders)
             print("Thank you for choosing us!")
+            break
+        elif option == 7:
+            print("Exiting the program. Have a nice day!")
             break
         else:
             print("Invalid option. Please try again.")

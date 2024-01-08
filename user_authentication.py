@@ -3,6 +3,7 @@
 import json
 from card_Holder import Card_Holder
 
+
 def authenticate_user(card_holders_list):
     while True:
         try:
@@ -52,7 +53,7 @@ def save_card_holders_to_json(card_holders, filename):
         for holder in card_holders
     ]
     with open(filename, 'w') as file:
-        json.dump(card_holders_data, file)
+        json.dump(card_holders_data, file, indent=2)
 
 def get_user_pin(current_user):
     while True:
