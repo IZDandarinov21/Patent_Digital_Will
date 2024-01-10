@@ -104,22 +104,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-<<<<<<< HEAD
-      <AdditionalIncludeDirectories>C:\Users\GYFilipov21\source\repos\_Ecological-Game-Project_\raylib\include</AdditionalIncludeDirectories>
-=======
-      <AdditionalIncludeDirectories>D:\project2024\Patent_Digital_Will\raylib\include</AdditionalIncludeDirectories>
->>>>>>> 6f963eb (Add raylib)
+      <AdditionalIncludeDirectories>D:\project2024\raylib\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-<<<<<<< HEAD
-      <AdditionalLibraryDirectories>C:\Users\GYFilipov21\source\repos\_Ecological-Game-Project_\raylib</AdditionalLibraryDirectories>
-=======
-      <AdditionalLibraryDirectories>D:\project2024\Patent_Digital_Will\raylib</AdditionalLibraryDirectories>
->>>>>>> 6f963eb (Add raylib)
+      <AdditionalLibraryDirectories>D:\project2024\raylib</AdditionalLibraryDirectories>
       <AdditionalDependencies>winmm.lib;raylib.lib;$(CoreLibraryDependencies);%(AdditionalDependencies);</AdditionalDependencies>
-      <PerUserRedirection>true</PerUserRedirection>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
