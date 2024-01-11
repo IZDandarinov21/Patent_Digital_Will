@@ -1,7 +1,7 @@
 # card_Holder.py
 
 class Card_Holder:
-    def __init__(self, cardNum, pin, firstName, lastName, balance):
+    def __init__(self, cardNum, pin, firstName, lastName, balance, savings_balance, savings_currency):
         self.cardNum = cardNum
         self.pin = pin
         self.firstName = firstName
@@ -9,6 +9,11 @@ class Card_Holder:
         self.balance = balance
         self.transaction_history = []
         self.investment_accounts = []
+        self.savings_balance = 0.0
+        self.savings_currency = "BGN"
+        self.savings_balance = savings_balance
+        self.savings_currency = savings_currency
+
 
     def get_cardNum(self):
         return self.cardNum
@@ -48,4 +53,19 @@ class Card_Holder:
 
     def add_investment_account(self, investment_account):
         self.investment_accounts.append(investment_account)
+
+    def add_to_savings(self, amount):
+        self.savings_balance += amount
+
+    def get_savings_balance(self):
+        return self.savings_balance
+
+    def get_savings_currency(self):
+        return self.savings_currency
+
+    def subtract_from_savings(self, amount):
+        if amount <= self.savings_balance:
+            self.savings_balance -= amount
+        else:
+            print("Insufficient funds in the savings account.")
 
