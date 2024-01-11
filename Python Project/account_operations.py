@@ -1,5 +1,6 @@
 from user_authentication import get_user_by_names
 from user_authentication import  save_card_holders_to_json
+from investment_account import InvestmentAccount
 from card_Holder import Card_Holder
 import random
 
@@ -158,3 +159,58 @@ def change_user_info(current_user, list_of_card_holders):
 
     except ValueError:
         print("Invalid input. Please enter valid information.")
+
+
+def create_investment_account(current_user, list_of_card_holders):
+    print("Creating an Investment Account...")
+
+    investment_options = {
+        1: ("Bitcoin", "bitcoin"),
+        2: ("Stocks", "stocks"),
+        3: ("Gold", "gold")
+    }
+
+    # Display available investment options
+    print("Choose an investment type:")
+    for option, (investment_name, _) in investment_options.items():
+        print(f"{option}. {investment_name}")
+
+    try:
+        choice = int(input("Enter your choice (1-3): ").strip())
+
+        if choice in investment_options:
+            investment_name, investment_code = investment_options[choice]
+
+            # Get the initial investment amount from the user
+            while True:
+                try:
+                    initial_investment = float(input(f"Enter the initial investment amount for {investment_name}: "))
+                    if initial_investment <= 0:
+                        print("Invalid amount. Please enter a positive value.")
+                    elif initial_investment > current_user.get_balance():
+                        print("Insufficient balance. Please enter a lower investment amount.")
+                    else:
+                        break
+                except ValueError:
+                    print("Invalid input. Please enter a valid amount.")
+
+            # Deduct the investment amount from the user's balance
+            current_user.set_balance(current_user.get_balance() - initial_investment)
+
+            # Create a new InvestmentAccount instance
+            investment_account = InvestmentAccount(investment_name, initial_investment)
+
+            # Add the investment account to the user's list of accounts
+            current_user.add_investment_account(investment_account)
+
+            # Save the updated user data to the JSON file
+            save_card_holders_to_json(list_of_card_holders, 'card_holders.json')
+
+            print(f"Investment Account for {investment_name} created successfully!")
+            print(f"Initial Investment: {initial_investment} USD")
+            print(f"Remaining balance: {current_user.get_balance()} USD")
+        else:
+            print("Invalid choice. Investment account creation canceled.")
+
+    except ValueError:
+        print("Invalid input. Please enter a valid choice.")

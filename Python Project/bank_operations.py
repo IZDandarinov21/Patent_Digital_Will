@@ -98,6 +98,97 @@ def transfer(current_user, list_of_card_holders):
     save_card_holders_to_json(list_of_card_holders, 'card_holders.json')
 
 
+def pay_basic_expenses(current_user, list_of_card_holders):
+    print("Paying Basic Living Expenses...")
+
+    expense_options = {
+        1: ("Water Bill", "water", 50.0),
+        2: ("Electricity Bill", "electricity", 100.0),
+        3: ("Internet Bill", "internet", 30.0),
+        4: ("Tax Bills", "tax", 400.0),
+        5: ("Pay all taxes", "all", 580) # Adding a default value for tax
+    }
+
+    # Display available expense options
+    print("Choose an expense to pay:")
+    for option, (expense_name, _, expense_amount) in expense_options.items():
+        print(f"{option}. {expense_name} - Amount: {expense_amount} leva")
+
+    try:
+        choice = int(input("Enter your choice (1-4): ").strip())
+
+        if choice == 4:
+            # Paying taxes
+            taxes = {
+                1: ("Property Tax", "property_tax", 200.0),
+                2: ("Income Tax", "income_tax", 150.0),
+                3: ("Sales Tax", "sales_tax", 50.0),
+                4: ("All Taxes", "all_taxes", 400.0)
+                # Add more taxes as needed
+            }
+
+            print("Choose a tax to pay:")
+            for tax_option, (tax_name, _, tax_amount) in taxes.items():
+                print(f"{tax_option}. {tax_name} - Amount: {tax_amount} leva")
+
+            tax_choice = int(input("Enter your tax choice (1-4): ").strip())
+
+            if tax_choice in taxes:
+                tax_name, tax_code, tax_amount = taxes[tax_choice]
+
+                # Check if the user has sufficient balance
+                if current_user.get_balance() < tax_amount:
+                    print("Insufficient balance. Tax payment canceled.")
+                    return
+
+                print(f"{tax_name} payment of {tax_amount} leva confirmed!")
+
+                # Deduct the amount from the user's balance
+                current_user.set_balance(current_user.get_balance() - tax_amount)
+                current_user.add_to_history(f"Tax Payment - {tax_name}", tax_amount)
+
+                print("Payment successful!")
+                print(f"Remaining balance: {current_user.get_balance()} leva")
+
+                # Save updated data to JSON file after tax payment
+                save_card_holders_to_json(list_of_card_holders, 'card_holders.json')
+
+            else:
+                print("Invalid tax choice. Tax payment canceled.")
+                return
+
+        elif choice in expense_options:
+            expense_name, expense_code, expense_amount = expense_options[choice]
+
+            # Check if the user has sufficient balance
+            if current_user.get_balance() < expense_amount:
+                print("Insufficient balance. Bill payment canceled.")
+                return
+
+            print(f"{expense_name} payment of {expense_amount} leva confirmed!")
+
+            # Deduct the amount from the user's balance
+            current_user.set_balance(current_user.get_balance() - expense_amount)
+            current_user.add_to_history(f"Bill Payment - {expense_name}", expense_amount)
+
+            print("Payment successful!")
+            print(f"Remaining balance: {current_user.get_balance()} leva")
+
+            # Save updated data to JSON file after bill payment
+            save_card_holders_to_json(list_of_card_holders, 'card_holders.json')
+
+        else:
+            print("Invalid choice. Bill payment canceled.")
+
+    except ValueError:
+        print("Invalid input. Please enter a valid choice.")
+
+
+
+
+
+
+
 
 
 

@@ -48,7 +48,14 @@ def save_card_holders_to_json(card_holders, filename):
             'pin': holder.get_pin(),
             'firstName': holder.get_firstName(),
             'lastName': holder.get_lastName(),
-            'balance': holder.get_balance()
+            'balance': holder.get_balance(),
+            'investment_accounts': [
+                {
+                    'investment_type': account.get_investment_type(),
+                    'initial_investment': account.get_initial_investment()
+                }
+                for account in holder.investment_accounts
+            ]
         }
         for holder in card_holders
     ]

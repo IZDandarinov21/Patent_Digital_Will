@@ -8,6 +8,7 @@ class Card_Holder:
         self.lastName = lastName
         self.balance = balance
         self.transaction_history = []
+        self.investment_accounts = []
 
     def get_cardNum(self):
         return self.cardNum
@@ -44,4 +45,7 @@ class Card_Holder:
 
     def get_transaction_history(self):
         return self.transaction_history
+
+    def add_investment_account(self, investment_account):
+        self.investment_accounts.append(investment_account)
 

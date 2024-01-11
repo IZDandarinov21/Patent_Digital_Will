@@ -1,8 +1,8 @@
 # main.py
 from menu import print_menu
-from account_operations import create_account, close_account, change_user_info
+from account_operations import create_account, close_account, change_user_info, create_investment_account
 from user_authentication import authenticate_user, get_user_pin, load_card_holders_from_json
-from bank_operations import deposit, withdrawal, transfer, check_balance_and_transaction_history
+from bank_operations import deposit, withdrawal, transfer, check_balance_and_transaction_history, pay_basic_expenses
 
 def main():
     list_of_card_holders = load_card_holders_from_json('card_holders.json')
@@ -43,16 +43,20 @@ def main():
         elif option == 2:
             withdrawal(current_user, list_of_card_holders)
         elif option == 3:
-            check_balance_and_transaction_history(current_user)
+            pay_basic_expenses(current_user, list_of_card_holders)
         elif option == 4:
-            transfer(current_user, list_of_card_holders)
+            check_balance_and_transaction_history(current_user)
         elif option == 5:
-            change_user_info(current_user, list_of_card_holders)
+            transfer(current_user, list_of_card_holders)
         elif option == 6:
+            create_investment_account(current_user, list_of_card_holders)
+        elif option == 7:
+            change_user_info(current_user, list_of_card_holders)
+        elif option == 8:
             close_account(current_user, list_of_card_holders)
             print("Thank you for choosing us!")
             break
-        elif option == 7:
+        elif option == 9:
             print("Exiting the program. Have a nice day!")
             break
         else:
