@@ -9,7 +9,7 @@ def deposit(card_holder, list_of_card_holders):
         deposit_amount = float(input("How much do you like to deposit: "))
         card_holder.set_balance(card_holder.get_balance() + deposit_amount)
         card_holder.add_to_history("Deposit", deposit_amount)
-        print("Thank you for your money, your balance is: ", str(card_holder.get_balance()))
+        print("Thank you for your money. Your balance is: ", str(card_holder.get_balance()))
 
         # Save updated data to JSON file after deposit
         save_card_holders_to_json(list_of_card_holders, 'card_holders.json')
