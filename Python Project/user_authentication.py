@@ -50,20 +50,20 @@ def load_card_holders_from_json(filename):
 def save_card_holders_to_json(card_holders, filename):
     card_holders_data = [
         {
-            'Spending_Account': {
-                'Card number': holder.get_cardNum(),
-                'PIN': holder.get_pin(),
-                'First name': holder.get_firstName(),
-                'Last name': holder.get_lastName(),
-                'Balance': round(holder.get_balance(), 2),
+            'spending_account': {
+                'cardNum': holder.get_cardNum(),
+                'pin': holder.get_pin(),
+                'firstName': holder.get_firstName(),
+                'lastName': holder.get_lastName(),
+                'balance': round(holder.get_balance(), 2),
             },
-            'Savings_Account': {
-                'Balance BGN': round(holder.get_savings_balance_bgn(), 2),
-                'Currency BGN': holder.get_savings_currency_bgn(),
-                'Balance USD': round(holder.get_savings_balance_usd(), 2),
-                'Currency USD': holder.get_savings_currency_usd(),
-                'Balance EUR': round(holder.get_savings_balance_eur(), 2),
-                'Currency EUR': holder.get_savings_currency_eur(),
+            'savings_account': {
+                'balance_bgn': round(holder.get_savings_balance_bgn(), 2),
+                'currency_bgn': holder.get_savings_currency_bgn(),
+                'balance_usd': round(holder.get_savings_balance_usd(), 2),
+                'currency_usd': holder.get_savings_currency_usd(),
+                'balance_eur': round(holder.get_savings_balance_eur(), 2),
+                'currency_eur': holder.get_savings_currency_eur(),
             }
         }
         for holder in card_holders

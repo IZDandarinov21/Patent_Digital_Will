@@ -1,11 +1,11 @@
 # card_Holder.py
 
 class Card_Holder:
-    def __init__(self, card_Num, pin, firstName, lastName, balance,
+    def __init__(self, cardNum, pin, firstName, lastName, balance,
                  savings_balance_bgn, savings_currency_bgn,
                  savings_balance_usd, savings_currency_usd,
                  savings_balance_eur, savings_currency_eur):
-        self.cardNum = card_Num
+        self.cardNum = cardNum
         self.pin = pin
         self.firstName = firstName
         self.lastName = lastName

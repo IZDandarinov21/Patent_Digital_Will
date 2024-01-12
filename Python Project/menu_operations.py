@@ -10,7 +10,7 @@ def print_menu():
     print("4. Show Balance and Transactions History")
     print("5. Transfer")
     print("6. Change User Information")
-    print("7. Saving Account Management")
+    print("7. Create Saving Account")
     print("8. Close Account")
     print("9. Exit")
 
