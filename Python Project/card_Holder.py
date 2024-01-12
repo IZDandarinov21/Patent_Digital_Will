@@ -1,18 +1,34 @@
 # card_Holder.py
 
 class Card_Holder:
-    def __init__(self, cardNum, pin, firstName, lastName, balance, savings_balance, savings_currency):
-        self.cardNum = cardNum
+    def __init__(self, card_Num, pin, firstName, lastName, balance,
+                 savings_balance_bgn, savings_currency_bgn,
+                 savings_balance_usd, savings_currency_usd,
+                 savings_balance_eur, savings_currency_eur):
+        self.cardNum = card_Num
         self.pin = pin
         self.firstName = firstName
         self.lastName = lastName
         self.balance = balance
         self.transaction_history = []
         self.investment_accounts = []
-        self.savings_balance = 0.0
-        self.savings_currency = "BGN"
-        self.savings_balance = savings_balance
-        self.savings_currency = savings_currency
+        self.savings_balance_bgn = savings_balance_bgn
+
+        # Set default value for savings_currency_bgn if not provided
+        self.savings_currency_bgn = savings_currency_bgn if savings_currency_bgn else "BGN"
+
+        self.savings_balance_usd = savings_balance_usd
+        self.savings_currency_usd = savings_currency_usd
+        self.savings_balance_eur = savings_balance_eur
+        self.savings_currency_eur = savings_currency_eur
+
+        # Set default values for currency fields if not provided
+        if not self.savings_currency_usd:
+            self.savings_currency_usd = "USD"
+        if not self.savings_currency_eur:
+            self.savings_currency_eur = "EUR"
+
+
 
 
     def get_cardNum(self):
@@ -51,21 +67,59 @@ class Card_Holder:
     def get_transaction_history(self):
         return self.transaction_history
 
-    def add_investment_account(self, investment_account):
-        self.investment_accounts.append(investment_account)
+    def add_to_savings_bgn(self, amount):
+        self.savings_balance_bgn += amount
 
-    def add_to_savings(self, amount):
-        self.savings_balance += amount
+    def get_savings_balance_bgn(self):
+        return self.savings_balance_bgn
 
-    def get_savings_balance(self):
-        return self.savings_balance
+    def get_savings_currency_bgn(self):
+        return self.savings_currency_bgn
 
-    def get_savings_currency(self):
-        return self.savings_currency
-
-    def subtract_from_savings(self, amount):
-        if amount <= self.savings_balance:
-            self.savings_balance -= amount
+    def subtract_from_savings_bgn(self, amount):
+        if amount <= self.savings_balance_bgn:
+            self.savings_balance_bgn -= amount
         else:
             print("Insufficient funds in the savings account.")
+
+    def add_to_savings_usd(self, amount):
+        self.savings_balance_usd += amount
+
+    def get_savings_balance_usd(self):
+        return self.savings_balance_usd
+
+    def get_savings_currency_usd(self):
+        return self.savings_currency_usd
+
+    def subtract_from_savings_usd(self, amount):
+        if amount <= self.savings_balance_usd:
+            self.savings_balance_usd -= amount
+        else:
+            print("Insufficient funds in the USD savings account.")
+
+    def add_to_savings_eur(self, amount):
+        self.savings_balance_eur += amount
+
+    def get_savings_balance_eur(self):
+        return self.savings_balance_eur
+
+    def get_savings_currency_eur(self):
+        return self.savings_currency_eur
+
+    def subtract_from_savings_eur(self, amount):
+        if amount <= self.savings_balance_eur:
+            self.savings_balance_eur -= amount
+        else:
+            print("Insufficient funds in the Euro savings account.")
+
+    def get_savings_balance(self, currency):
+        if currency == 'BGN':
+            return self.savings_balance_bgn
+        elif currency == 'USD':
+            return self.savings_balance_usd
+        elif currency == 'EUR':
+            return self.savings_balance_eur
+        else:
+            print(f"Invalid currency: {currency}")
+            return 0.0
 

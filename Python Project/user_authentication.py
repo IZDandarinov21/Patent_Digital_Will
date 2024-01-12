@@ -21,7 +21,6 @@ def authenticate_user(card_holders_list):
         except IndexError:
             print("Invalid card number or PIN. Please try again.")
 
-# ...
 
 def load_card_holders_from_json(filename):
     try:
@@ -34,8 +33,12 @@ def load_card_holders_from_json(filename):
                     data.get('spending_account', {}).get('firstName', ''),
                     data.get('spending_account', {}).get('lastName', ''),
                     data.get('spending_account', {}).get('balance', 0.0),
-                    data.get('savings_account', {}).get('balance', 0.0),
-                    data.get('savings_account', {}).get('currency', ''),
+                    data.get('savings_account', {}).get('balance_bgn', 0.0),
+                    data.get('savings_account', {}).get('currency_bgn', ''),
+                    data.get('savings_account', {}).get('balance_usd', 0.0),
+                    data.get('savings_account', {}).get('currency_usd', ''),
+                    data.get('savings_account', {}).get('balance_eur', 0.0),
+                    data.get('savings_account', {}).get('currency_eur', ''),
                 )
                 for data in card_holders_data
             ]
@@ -47,23 +50,26 @@ def load_card_holders_from_json(filename):
 def save_card_holders_to_json(card_holders, filename):
     card_holders_data = [
         {
-            'spending_account': {
-                'cardNum': holder.get_cardNum(),
-                'pin': holder.get_pin(),
-                'firstName': holder.get_firstName(),
-                'lastName': holder.get_lastName(),
-                'balance': holder.get_balance(),
+            'Spending_Account': {
+                'Card number': holder.get_cardNum(),
+                'PIN': holder.get_pin(),
+                'First name': holder.get_firstName(),
+                'Last name': holder.get_lastName(),
+                'Balance': round(holder.get_balance(), 2),
             },
-            'savings_account': {
-                'balance': holder.get_savings_balance(),
-                'currency': holder.get_savings_currency()
+            'Savings_Account': {
+                'Balance BGN': round(holder.get_savings_balance_bgn(), 2),
+                'Currency BGN': holder.get_savings_currency_bgn(),
+                'Balance USD': round(holder.get_savings_balance_usd(), 2),
+                'Currency USD': holder.get_savings_currency_usd(),
+                'Balance EUR': round(holder.get_savings_balance_eur(), 2),
+                'Currency EUR': holder.get_savings_currency_eur(),
             }
         }
         for holder in card_holders
     ]
     with open(filename, 'w') as file:
         json.dump(card_holders_data, file, indent=2)
-
 
 
 def get_user_pin(current_user):
@@ -74,8 +80,9 @@ def get_user_pin(current_user):
                 return True
             else:
                 print("Invalid PIN. Please try again.")
-        except:
+        except ValueError:
             print("Invalid PIN. Please try again.")
+
 
 def get_user_by_names(first_name, last_name, card_number, card_holders_list):
     for holder in card_holders_list:

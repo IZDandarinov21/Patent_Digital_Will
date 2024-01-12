@@ -1,41 +1,53 @@
 [
   {
-    "spending_account": {
-      "cardNum": "885493957439598989345",
-      "pin": 1234,
-      "firstName": "Ivayla",
-      "lastName": "Kuzmova",
-      "balance": 467.6200000000001
+    "Spending_Account": {
+      "Card number": "885493957439598989345",
+      "PIN": 1234,
+      "First name": "Ivayla",
+      "Last name": "Kuzmova",
+      "Balance": 249.78
     },
-    "savings_account": {
-      "balance": 1.0,
-      "currency": "BGN"
+    "Savings_Account": {
+      "Balance BGN": 20.0,
+      "Currency BGN": "BGN",
+      "Balance USD": 12.0,
+      "Currency USD": "USD",
+      "Balance EUR": 148.0,
+      "Currency EUR": "EUR"
     }
   },
   {
-    "spending_account": {
-      "cardNum": "1234567890123456",
-      "pin": 4321,
-      "firstName": "Atanas",
-      "lastName": "Apostolov",
-      "balance": 1009.0
+    "Spending_Account": {
+      "Card number": "1234567890123456",
+      "PIN": 4321,
+      "First name": "Atanas",
+      "Last name": "Apostolov",
+      "Balance": 1009.0
     },
-    "savings_account": {
-      "balance": 1.0,
-      "currency": "BGN"
+    "Savings_Account": {
+      "Balance BGN": 0.0,
+      "Currency BGN": "BGN",
+      "Balance USD": 0.0,
+      "Currency USD": "USD",
+      "Balance EUR": 0.0,
+      "Currency EUR": "EUR"
     }
   },
   {
-    "spending_account": {
-      "cardNum": "4434863622048576",
-      "pin": 1111,
-      "firstName": "Dimitar",
-      "lastName": "Bqndov",
-      "balance": 196.0
+    "Spending_Account": {
+      "Card number": "4434863622048576",
+      "PIN": 1111,
+      "First name": "Dimitar",
+      "Last name": "Bqndov",
+      "Balance": 196.0
     },
-    "savings_account": {
-      "balance": 4.0,
-      "currency": "BGN"
+    "Savings_Account": {
+      "Balance BGN": 0.0,
+      "Currency BGN": "BGN",
+      "Balance USD": 0.0,
+      "Currency USD": "USD",
+      "Balance EUR": 0.0,
+      "Currency EUR": "EUR"
     }
   }
 ]
