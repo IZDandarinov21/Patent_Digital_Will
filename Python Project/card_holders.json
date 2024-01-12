@@ -5,10 +5,10 @@
       "pin": 1234,
       "firstName": "Ivayla",
       "lastName": "Kuzmova",
-      "balance": 436.6200000000001
+      "balance": 467.6200000000001
     },
     "savings_account": {
-      "balance": 32.0,
+      "balance": 1.0,
       "currency": "BGN"
     }
   },
@@ -18,10 +18,10 @@
       "pin": 4321,
       "firstName": "Atanas",
       "lastName": "Apostolov",
-      "balance": 420.0
+      "balance": 1009.0
     },
     "savings_account": {
-      "balance": 0.0,
+      "balance": 1.0,
       "currency": "BGN"
     }
   },
@@ -29,12 +29,12 @@
     "spending_account": {
       "cardNum": "4434863622048576",
       "pin": 1111,
-      "firstName": "Ivana",
-      "lastName": "Pavelova",
-      "balance": 100.0
+      "firstName": "Dimitar",
+      "lastName": "Bqndov",
+      "balance": 196.0
     },
     "savings_account": {
-      "balance": 0.0,
+      "balance": 4.0,
       "currency": "BGN"
     }
   }

@@ -19,32 +19,32 @@ def savings_account(current_user, list_of_card_holders):
 
 
 def transfer_from_savings(current_user, list_of_card_holders):
+    # Display the current savings balance
+    print(f"Current Savings Account Balance: {current_user.get_savings_balance()} BGN")
+
     try:
-        amount = float(input("Enter the amount to transfer from Savings to Main Account: "))
-        if amount <= 0:
-            print("Invalid amount. Please enter a positive value.")
+        transfer_amount = float(input("Enter the amount to transfer from Savings to Main Account: "))
+        if transfer_amount <= 0 or transfer_amount > current_user.get_savings_balance():
+            print("Invalid transfer amount. Please enter a valid amount.")
             return
     except ValueError:
         print("Invalid input. Please enter a valid amount.")
         return
 
-    # Check if there is enough balance in the savings account
-    if current_user.get_savings_balance() < amount:
-        print("Insufficient savings balance. Transfer canceled.")
-        return
-
     # Update balances and transaction history
-    current_user.set_balance(current_user.get_balance() + amount)
-    current_user.subtract_from_savings(amount)
-    current_user.add_to_history("Transfer from Savings", amount)
+    current_user.set_balance(current_user.get_balance() + transfer_amount)
+    current_user.subtract_from_savings(transfer_amount)
+    current_user.add_to_history("Transfer from Savings", transfer_amount)
 
     # Save the updated data to the JSON file
     save_card_holders_to_json(list_of_card_holders, 'card_holders.json')
 
     print("Transfer successful!")
-    print(f"Amount transferred to Main Account: {amount} USD")
-    print(f"Main Account Balance: {current_user.get_balance()} USD")
-    print(f"Savings Account Balance: {current_user.get_savings_balance()} USD")
+    print(f"Amount transferred to Main Account: {transfer_amount} BGN")
+    print(f"Main Account Balance: {current_user.get_balance()} BGN")
+    print(f"Savings Account Balance: {current_user.get_savings_balance()} BGN")
+
+
 
 
 def deposit_to_savings(current_user, list_of_card_holders):
@@ -57,6 +57,11 @@ def deposit_to_savings(current_user, list_of_card_holders):
         print("Invalid input. Please enter a valid amount.")
         return
 
+    # Check if there is enough balance in the main account
+    if current_user.get_balance() < amount:
+        print("Insufficient main account balance. Deposit to Savings canceled.")
+        return
+
     # Update balances and transaction history
     current_user.add_to_savings(amount)
     current_user.set_balance(current_user.get_balance() - amount)
@@ -66,7 +71,8 @@ def deposit_to_savings(current_user, list_of_card_holders):
     save_card_holders_to_json(list_of_card_holders, 'card_holders.json')
 
     print("Deposit to Savings successful!")
-    print(f"Amount deposited to Savings Account: {amount} USD")
-    print(f"Main Account Balance: {current_user.get_balance()} USD")
-    print(f"Savings Account Balance: {current_user.get_savings_balance()} USD")
+    print(f"Amount deposited to Savings Account: {amount} BGN")
+    print(f"Main Account Balance: {current_user.get_balance()} BGN")
+    print(f"Savings Account Balance: {current_user.get_savings_balance()} BGN")
+
 

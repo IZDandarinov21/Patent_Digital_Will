@@ -112,7 +112,7 @@ def pay_basic_expenses(current_user, list_of_card_holders):
     # Display available expense options
     print("Choose an expense to pay:")
     for option, (expense_name, _, expense_amount) in expense_options.items():
-        print(f"{option}. {expense_name} - Amount: {expense_amount} leva")
+        print(f"{option}. {expense_name} - Amount: {expense_amount} BGN")
 
     try:
         choice = int(input("Enter your choice (1-4): ").strip())
@@ -129,7 +129,7 @@ def pay_basic_expenses(current_user, list_of_card_holders):
 
             print("Choose a tax to pay:")
             for tax_option, (tax_name, _, tax_amount) in taxes.items():
-                print(f"{tax_option}. {tax_name} - Amount: {tax_amount} leva")
+                print(f"{tax_option}. {tax_name} - Amount: {tax_amount} BGN")
 
             tax_choice = int(input("Enter your tax choice (1-4): ").strip())
 
@@ -141,14 +141,14 @@ def pay_basic_expenses(current_user, list_of_card_holders):
                     print("Insufficient balance. Tax payment canceled.")
                     return
 
-                print(f"{tax_name} payment of {tax_amount} leva confirmed!")
+                print(f"{tax_name} payment of {tax_amount} BGN confirmed!")
 
                 # Deduct the amount from the user's balance
                 current_user.set_balance(current_user.get_balance() - tax_amount)
                 current_user.add_to_history(f"Tax Payment - {tax_name}", tax_amount)
 
                 print("Payment successful!")
-                print(f"Remaining balance: {current_user.get_balance()} leva")
+                print(f"Remaining balance: {current_user.get_balance()} BGN")
 
                 # Save updated data to JSON file after tax payment
                 save_card_holders_to_json(list_of_card_holders, 'card_holders.json')
@@ -165,14 +165,14 @@ def pay_basic_expenses(current_user, list_of_card_holders):
                 print("Insufficient balance. Bill payment canceled.")
                 return
 
-            print(f"{expense_name} payment of {expense_amount} leva confirmed!")
+            print(f"{expense_name} payment of {expense_amount} BGN confirmed!")
 
             # Deduct the amount from the user's balance
             current_user.set_balance(current_user.get_balance() - expense_amount)
             current_user.add_to_history(f"Bill Payment - {expense_name}", expense_amount)
 
             print("Payment successful!")
-            print(f"Remaining balance: {current_user.get_balance()} leva")
+            print(f"Remaining balance: {current_user.get_balance()} BGN")
 
             # Save updated data to JSON file after bill payment
             save_card_holders_to_json(list_of_card_holders, 'card_holders.json')
