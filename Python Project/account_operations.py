@@ -66,16 +66,30 @@ def close_account(current_user, card_holders_list):
         choice = int(input("Enter your choice (1-2): ").strip())
 
         if choice == 1:
-            # Automatically withdraw all the remaining balance
+            # Automatically withdraw all the remaining balance from spending and savings
+            total_spending = current_user.get_balance()
+            total_savings = (
+                current_user.get_savings_balance('BGN') +
+                current_user.get_savings_balance('USD') * EXCHANGE_RATES['USD'] +
+                current_user.get_savings_balance('EUR') * EXCHANGE_RATES['EUR']
+            )
 
-            print("Warning: Choosing to withdraw will remove all of your money from your account.")
+            total_withdrawal = total_spending + total_savings
+
+            print(f"Warning: Choosing to withdraw will remove all of your money from your account.")
             confirm = input("Are you sure you want to proceed? (yes/no): ").strip().lower()
 
             if confirm == "yes":
-                withdrawal_amount = current_user.get_balance()
-                current_user.set_balance(0)
-                current_user.add_to_history("Account Closure - Withdrawal", withdrawal_amount)
-                print(f"Withdrawn {withdrawal_amount} from your account. Account closed successfully.")
+                # Withdraw from spending account
+                current_user.subtract_from_balance(total_spending)
+
+                # Withdraw from savings accounts
+                current_user.subtract_from_savings_bgn(current_user.get_savings_balance_bgn())
+                current_user.subtract_from_savings_usd(current_user.get_savings_balance_usd())
+                current_user.subtract_from_savings_eur(current_user.get_savings_balance_eur())
+
+                current_user.add_to_history("Account Closure - Withdrawal", total_withdrawal)
+                print(f"Withdrawn {total_withdrawal} BGN from your account. Account closed successfully.")
             else:
                 print("Withdraw canceled. Account closure canceled.")
                 return
@@ -104,6 +118,11 @@ def close_account(current_user, card_holders_list):
         print("Invalid input. Please enter a valid choice.")
 
 
+
+
+
+EXCHANGE_RATES = {'USD': 1.79, 'EUR': 1.96}
+
 def transfer_for_closing_account(sender, list_of_card_holders):
     print("Enter receiver's information:")
     receiver_first_name = input("Receiver's first name: ")
@@ -116,20 +135,39 @@ def transfer_for_closing_account(sender, list_of_card_holders):
         print(f"Receiver {receiver_first_name} {receiver_last_name} not found in the list of card holders.")
         return
 
-    # Transfer all the sender's money to the receiver
-    amount = sender.get_balance()
-    sender.set_balance(0)
+    # Calculate the total amount to be transferred
+    total_amount = sender.get_balance() + sender.get_savings_balance('BGN')
 
-    sender.add_to_history(f"Transfer to {receiver.get_firstName()} {receiver.get_lastName()}", amount)
+    # Convert and add the USD savings to the total amount using the exchange rate
+    total_amount += sender.get_savings_balance('USD') * EXCHANGE_RATES['USD']
+
+    # Convert and add the EUR savings to the total amount using the exchange rate
+    total_amount += sender.get_savings_balance('EUR') * EXCHANGE_RATES['EUR']
+
+    # Set sender's balances to zero
+    sender.set_balance(0)
+    sender.add_to_savings_bgn(-sender.get_savings_balance_bgn())
+    sender.add_to_savings_usd(-sender.get_savings_balance_usd())
+    sender.add_to_savings_eur(-sender.get_savings_balance_eur())
+
+    # Add a transaction history entry for the total transfer
+    sender.add_to_history(f"Transfer to {receiver.get_firstName()} {receiver.get_lastName()}", total_amount)
+
+    # Convert and set the total amount to the receiver's balance
     receiver_balance = receiver.get_balance()
-    receiver.set_balance(receiver_balance + amount)
-    receiver.add_to_history(f"Received from {sender.get_firstName()} {sender.get_lastName()}", amount)
+    receiver.set_balance(receiver_balance + total_amount)
+
+    # Add a transaction history entry for the total received
+    receiver.add_to_history(f"Received from {sender.get_firstName()} {sender.get_lastName()}", total_amount)
 
     print("Transfer successful!")
     print(f"Sender's balance: {sender.get_balance()}")
     print(f"Receiver's balance: {receiver.get_balance()}")
 
     save_card_holders_to_json(list_of_card_holders, 'card_holders.json')
+
+
+
 
 
 def change_user_info(current_user, list_of_card_holders):
