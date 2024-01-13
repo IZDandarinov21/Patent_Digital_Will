@@ -25,8 +25,21 @@ def create_account(list_of_card_holders):
 
     new_balance = 0.0  # You may set an initial balance if needed
 
-    # Create a new Card_Holder instance
-    new_card_holder = Card_Holder(new_card_num, new_pin, new_first_name, new_last_name, new_balance)
+    # Additional parameters for savings (set to default values)
+    savings_balance_bgn = 0.0
+    savings_currency_bgn = ''
+    savings_balance_usd = 0.0
+    savings_currency_usd = ''
+    savings_balance_eur = 0.0
+    savings_currency_eur = ''
+
+    # Create a new Card_Holder instance with savings parameters
+    new_card_holder = Card_Holder(
+        new_card_num, new_pin, new_first_name, new_last_name, new_balance,
+        savings_balance_bgn, savings_currency_bgn,
+        savings_balance_usd, savings_currency_usd,
+        savings_balance_eur, savings_currency_eur
+    )
 
     # Add the new account to the list of cardholders
     list_of_card_holders.append(new_card_holder)
@@ -38,6 +51,7 @@ def create_account(list_of_card_holders):
     print(f"Card Number: {new_card_num}")
     print(f"PIN: {new_pin}")
     print("Please remember these details for future logins.")
+
 
 
 def close_account(current_user, card_holders_list):

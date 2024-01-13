@@ -57,6 +57,10 @@ def deposit_to_savings(current_user, list_of_card_holders):
         print("Invalid input. Please enter a valid amount.")
         return
 
+    if amount > current_user.get_balance():
+        print("Insufficient funds. Cannot deposit more than the available balance.")
+        return
+
     print("Do you want to deposit in another currency?")
     print("1. No (Keep the money in leva)")
     print("2. Yes (Deposit in another currency)")
@@ -67,18 +71,20 @@ def deposit_to_savings(current_user, list_of_card_holders):
             deposit_in_currency(current_user, amount)
         elif currency_choice == 1:
             # Update balances and transaction history for leva
-            current_user.add_to_savings_bgn(amount)  # Corrected this line
+            current_user.add_to_savings_bgn(amount)
             current_user.set_balance(current_user.get_balance() - amount)
             current_user.add_to_history("Deposit to Savings (BGN)", amount)
-            print_deposit_message("BGN", amount, amount, current_user)  # Corrected this line
+
+            # Save the updated data to the JSON file
+            save_card_holders_to_json(list_of_card_holders, 'card_holders.json')
+
+            print_deposit_message("BGN", amount, amount, current_user)
         else:
             print("Invalid choice. Money will be kept in leva.")
 
-        # Save the updated data to the JSON file
-        save_card_holders_to_json(list_of_card_holders, 'card_holders.json')
-
     except ValueError:
         print("Invalid input. Please enter a valid choice.")
+
 
 
 def deposit_in_currency(current_user, amount):
