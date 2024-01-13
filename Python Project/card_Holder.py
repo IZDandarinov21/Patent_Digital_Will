@@ -123,3 +123,9 @@ class Card_Holder:
             print(f"Invalid currency: {currency}")
             return 0.0
 
+    def subtract_from_balance(self, amount):
+        if amount <= self.balance:
+            self.balance -= amount
+        else:
+            print("Insufficient funds in the spending account.")
+
