@@ -1,7 +1,8 @@
 #include "Header.h"
 #define MAX_INPUT_CHARS 24
 
-struct LOGIN_INFO {
+struct LOGIN_INFO 
+{
     string email;
     string password;
 };
@@ -216,7 +217,7 @@ bool login()
             {
                 if ((convertToString(emailInput) == accounts[0].email) && (convertToString(passwordInput) == accounts[0].password))
                 {
-                    CloseWindow();
+                    app();
                 }
             }
             DrawRectangle(15, loginHeight / 2 + 50, 250, 40, loginButtonColorPressed);

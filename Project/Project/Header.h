@@ -10,3 +10,4 @@ const float screenHeight = 900;
 
 bool login();
 void main();
+void app();
