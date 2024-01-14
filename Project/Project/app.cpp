@@ -26,19 +26,26 @@ void app()
     Font customFont = LoadFont("../assets/lato.ttf");
     SetTargetFPS(60);
 
-    Rectangle depositButton = { screenWidth / 2 - 100, screenHeight / 2, 200, 50 };
-    Rectangle withdrawalButton = { screenWidth / 2 - 100, screenHeight / 2 + 60, 200, 50 };
-    Rectangle makeWillButton = { screenWidth / 2 - 100, screenHeight / 2 + 120, 200, 50 };
+    Rectangle transactionsButton = { 5, 70, 140, 65 };
+    Rectangle summaryButton = { 5, 140, 140, 65 };
+    Rectangle depositButton = { 5, 220, 140, 50 };
+    Rectangle withdrawalButton = { 5, 275, 140, 50 };
+    Rectangle sendMoneyButton = { 5, 330, 140, 50 };
+    Rectangle logOutButton = { 5, screenHeight - 55, 140, 50 };
 
     string amountInput = "";
     string recipientInput = "";
-    double balance = 0.0;
+    int balance = 1000;
     TransactionState transactionState = TransactionState::NONE;
 
-    bool makeWillButtonClicked = false;
+    bool sendMoneyButtonClicked = false;
 
     vector<string> messages;
     const int maxMessages = 5;
+
+    Color backgroundColor = { 225, 225, 225, 255 };
+    Color blue = { 6, 125, 155, 255 };
+    
 
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
@@ -49,21 +56,21 @@ void app()
         if (CheckCollisionPointRec(GetMousePosition(), depositButton) && IsMouseButtonReleased(MOUSE_LEFT_BUTTON))
         {
             transactionState = TransactionState::DEPOSIT;
-            makeWillButtonClicked = false;
+            sendMoneyButtonClicked = false;
         }
 
         // Check if the withdrawal button was clicked
         if (CheckCollisionPointRec(GetMousePosition(), withdrawalButton) && IsMouseButtonReleased(MOUSE_LEFT_BUTTON))
         {
             transactionState = TransactionState::WITHDRAWAL;
-            makeWillButtonClicked = false;
+            sendMoneyButtonClicked = false;
         }
 
         // Check if the make will button was clicked
-        if (CheckCollisionPointRec(GetMousePosition(), makeWillButton) && IsMouseButtonReleased(MOUSE_LEFT_BUTTON))
+        if (CheckCollisionPointRec(GetMousePosition(), sendMoneyButton) && IsMouseButtonReleased(MOUSE_LEFT_BUTTON))
         {
-            makeWillButtonClicked = !makeWillButtonClicked;
-            if (makeWillButtonClicked)
+            sendMoneyButtonClicked = !sendMoneyButtonClicked;
+            if (sendMoneyButtonClicked)
             {
                 transactionState = TransactionState::MAKE_WILL;
             }
@@ -88,7 +95,7 @@ void app()
         }
 
         // Handle text input for the recipient (for making the will)
-        if (makeWillButtonClicked && (IsKeyPressed(KEY_APOSTROPHE) || (key >= 32 && key <= 126))) // Check if key is a valid character
+        if (sendMoneyButtonClicked && (IsKeyPressed(KEY_APOSTROPHE) || (key >= 32 && key <= 126))) // Check if key is a valid character
         {
             recipientInput += (char)key;
         }
@@ -98,21 +105,37 @@ void app()
         //----------------------------------------------------------------------------------
         BeginDrawing();
 
-        ClearBackground(RAYWHITE);
+        ClearBackground(backgroundColor);
 
         // Use custom font
-        DrawTextEx(customFont, "Patent Bank", Vector2{ 10.0f, 10.0f }, 20.0f, 2.0f, BLACK);
-        DrawTextEx(customFont, ("Hi, User, Balance: " + to_string(balance)).c_str(), Vector2{ static_cast<float>(screenWidth / 2), 10.0f }, 20.0f, 2.0f, LIGHTGRAY);
+        DrawTextEx(customFont, "Patent Bank", Vector2{ 5.0f, 17.5f }, 27.5f, 2.0f, BLACK);
+        DrawRectangle(0, 60.0f, screenWidth, 5, blue);
+        DrawTextEx(customFont, "Welcome, user", Vector2{ 165.0f, 15.0f }, 30.0f, 2.0f, BLACK);
+        DrawTextEx(customFont, "Your accounts:", Vector2{ 167.5f, 60.0f }, 20.0f, 2.0f, BLACK);
+        //DrawTextEx(customFont, ("Balance: " + to_string(balance) + "$").c_str(), Vector2{7.5f, (float)screenHeight - 75.0f}, 20.0f, 2.0f, BLACK);
 
+        DrawRectangle(0, depositButton.y - 10.0f, 150, 5, blue);
         // Draw buttons
+        DrawRectangleRec(transactionsButton, LIGHTGRAY);
+        DrawTextEx(customFont, "Transactions", Vector2{ transactionsButton.x + 15.0f, transactionsButton.y + 22.5f }, 20.0f, 2.0f, BLACK);
+
+        DrawRectangleRec(summaryButton, LIGHTGRAY);
+        DrawTextEx(customFont, "Summary", Vector2{ summaryButton.x + 27.5f, summaryButton.y + 22.5f }, 20.0f, 2.0f, BLACK);
+
         DrawRectangleRec(depositButton, LIGHTGRAY);
-        DrawTextEx(customFont, "Deposit", Vector2{ depositButton.x + 70.0f, depositButton.y + 15.0f }, 20.0f, 2.0f, BLACK);
+        DrawTextEx(customFont, "Deposit", Vector2{ depositButton.x + 35.0f, depositButton.y + 15.0f }, 20.0f, 2.0f, BLACK);
 
         DrawRectangleRec(withdrawalButton, LIGHTGRAY);
-        DrawTextEx(customFont, "Withdraw", Vector2{ withdrawalButton.x + 60.0f, withdrawalButton.y + 15.0f }, 20.0f, 2.0f, BLACK);
+        DrawTextEx(customFont, "Withdraw", Vector2{ withdrawalButton.x + 25.0f, withdrawalButton.y + 15.0f }, 20.0f, 2.0f, BLACK);
 
-        DrawRectangleRec(makeWillButton, LIGHTGRAY);
-        DrawTextEx(customFont, "Make My Will", Vector2{ makeWillButton.x + 25.0f, makeWillButton.y + 15.0f }, 20.0f, 2.0f, BLACK);
+        DrawRectangleRec(sendMoneyButton, LIGHTGRAY);
+        DrawTextEx(customFont, "Send money", Vector2{ sendMoneyButton.x + 20.0f, sendMoneyButton.y + 15.0f }, 20.0f, 2.0f, BLACK);
+
+        DrawRectangleRec(logOutButton, LIGHTGRAY);
+        DrawRectangle(0, screenHeight - 65, 150, 5, blue);
+        DrawTextEx(customFont, "Log out", Vector2{ logOutButton.x + 35.0f, logOutButton.y + 15.0f }, 20.0f, 2.0f, BLACK);
+
+        DrawRectangle(150, 0, 5, screenHeight, blue);
 
         // Draw transaction window
         if (transactionState != TransactionState::NONE)
@@ -136,7 +159,7 @@ void app()
             }
 
             // Check if the mouse is within the transaction window
-            if (!IsMouseInRect(transactionWindow) && !makeWillButtonClicked)
+            if (!IsMouseInRect(transactionWindow) && !sendMoneyButtonClicked)
             {
                 transactionState = TransactionState::NONE;
                 amountInput = "";

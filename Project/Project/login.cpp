@@ -15,7 +15,7 @@ string convertToString(char* arr)
 
 bool login()
 {
-        Font customFont = LoadFont("../assets/lato.ttf");
+    Font customFont = LoadFont("../assets/lato.ttf");
 
     // Sample login info
 
