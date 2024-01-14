@@ -1,9 +1,27 @@
 #include "Header.h"
-
 #define MAX_INPUT_CHARS 24
+
+struct LOGIN_INFO {
+    string email;
+    string password;
+};
+
+string convertToString(char* arr)
+{
+    string str = arr;
+    return str;
+}
 
 bool login()
 {
+    // Sample login info
+
+    LOGIN_INFO accounts[10];
+    accounts[0].email = "joro@gmail.com";
+    accounts[0].password = "123456";
+
+
+
     // EMAIL INPUT BOX
     char emailInput[MAX_INPUT_CHARS + 1] = "\0";
     int emailCharCount = 0;
@@ -194,6 +212,13 @@ bool login()
         
         if (CheckCollisionPointRec(GetMousePosition(), { 15, loginHeight / 2 + 50, 250, 40 }))
         {
+            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+            {
+                if ((convertToString(emailInput) == accounts[0].email) && (convertToString(passwordInput) == accounts[0].password))
+                {
+                    CloseWindow();
+                }
+            }
             DrawRectangle(15, loginHeight / 2 + 50, 250, 40, loginButtonColorPressed);
         }
         DrawText("Login", loginWidth / 2 - 185, loginHeight / 2 + 60, 20, WHITE);
@@ -215,6 +240,7 @@ bool login()
     }
     return false;
 }
+
 
 bool IsAnyKeyPressed()
 {
