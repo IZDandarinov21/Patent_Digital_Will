@@ -23,7 +23,7 @@ void app()
     InitWindow(screenWidth, screenHeight, "Maze Bank");
 
     // Load custom font
-    Font customFont = LoadFont("Patent_Digital_Will/assets/lato.ttf");  
+    Font customFont = LoadFont("../assets/lato.ttf");  
     SetTargetFPS(60);
 
     Rectangle depositButton = { screenWidth / 2 - 100, screenHeight / 2, 200, 50 };
