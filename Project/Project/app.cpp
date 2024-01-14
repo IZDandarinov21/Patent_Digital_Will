@@ -1,6 +1,5 @@
 #include "Header.h"
 #include <string>
-#include <iostream>
 #include <vector>
 
 enum class TransactionState {
@@ -23,6 +22,10 @@ void app()
 
     InitWindow(screenWidth, screenHeight, "Maze Bank");
 
+    // Load custom font
+    Font customFont = LoadFont("Patent_Digital_Will/assets/lato.ttf");  
+    SetTargetFPS(60);
+
     Rectangle depositButton = { screenWidth / 2 - 100, screenHeight / 2, 200, 50 };
     Rectangle withdrawalButton = { screenWidth / 2 - 100, screenHeight / 2 + 60, 200, 50 };
     Rectangle makeWillButton = { screenWidth / 2 - 100, screenHeight / 2 + 120, 200, 50 };
@@ -34,7 +37,8 @@ void app()
 
     bool makeWillButtonClicked = false;
 
-    std::vector<std::string> users = { "User1", "User2", "User3" };  // Replace with your user list
+    std::vector<std::string> messages;
+    const int maxMessages = 5;
 
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
@@ -96,18 +100,19 @@ void app()
 
         ClearBackground(RAYWHITE);
 
-        DrawText("Patent Bank", 10, 10, 20, LIGHTGRAY);
-        DrawText(("Hi, User, Balance: " + std::to_string(balance)).c_str(), screenWidth / 2, 10, 20, LIGHTGRAY);
+        // Use custom font
+        DrawTextEx(customFont, "Patent Bank", Vector2{ 10.0f, 10.0f }, 20.0f, 2.0f, LIGHTGRAY);
+        DrawTextEx(customFont, ("Hi, User, Balance: " + std::to_string(balance)).c_str(), Vector2{ static_cast<float>(screenWidth / 2), 10.0f }, 20.0f, 2.0f, LIGHTGRAY);
 
         // Draw buttons
         DrawRectangleRec(depositButton, LIGHTGRAY);
-        DrawText("Deposit", depositButton.x + 70, depositButton.y + 15, 20, BLACK);
+        DrawTextEx(customFont, "Deposit", Vector2{ depositButton.x + 70.0f, depositButton.y + 15.0f }, 20.0f, 2.0f, BLACK);
 
         DrawRectangleRec(withdrawalButton, LIGHTGRAY);
-        DrawText("Withdraw", withdrawalButton.x + 60, withdrawalButton.y + 15, 20, BLACK);
+        DrawTextEx(customFont, "Withdraw", Vector2{ withdrawalButton.x + 60.0f, withdrawalButton.y + 15.0f }, 20.0f, 2.0f, BLACK);
 
         DrawRectangleRec(makeWillButton, LIGHTGRAY);
-        DrawText("Make My Will", makeWillButton.x + 25, makeWillButton.y + 15, 20, BLACK);
+        DrawTextEx(customFont, "Make My Will", Vector2{ makeWillButton.x + 25.0f, makeWillButton.y + 15.0f }, 20.0f, 2.0f, BLACK);
 
         // Draw transaction window
         if (transactionState != TransactionState::NONE)
@@ -115,19 +120,19 @@ void app()
             Rectangle transactionWindow = { screenWidth / 4, screenHeight / 4, screenWidth / 2, screenHeight / 2 };
 
             DrawRectangleRec(transactionWindow, LIGHTGRAY);
-            DrawText((transactionState == TransactionState::DEPOSIT ? "Deposit" :
+            DrawTextEx(customFont, (transactionState == TransactionState::DEPOSIT ? "Deposit" :
                 (transactionState == TransactionState::WITHDRAWAL ? "Withdrawal" : "Make My Will")),
-                screenWidth / 2 - 80, screenHeight / 4 + 10, 20, BLACK);
+                Vector2{ screenWidth / 2 - 80.0f, screenHeight / 4 + 10.0f }, 20.0f, 2.0f, BLACK);
 
             if (transactionState != TransactionState::MAKE_WILL)
             {
-                DrawText("Enter amount:", screenWidth / 2 - 80, screenHeight / 4 + 50, 20, BLACK);
-                DrawText(amountInput.c_str(), screenWidth / 2 - 80, screenHeight / 4 + 80, 20, BLACK);
+                DrawTextEx(customFont, "Enter amount:", Vector2{ screenWidth / 2 - 80.0f, screenHeight / 4 + 50.0f }, 20.0f, 2.0f, BLACK);
+                DrawTextEx(customFont, amountInput.c_str(), Vector2{ screenWidth / 2 - 80.0f, screenHeight / 4 + 80.0f }, 20.0f, 2.0f, BLACK);
             }
             else
             {
-                DrawText("Enter recipient (username):", screenWidth / 2 - 140, screenHeight / 4 + 50, 20, BLACK);
-                DrawText(recipientInput.c_str(), screenWidth / 2 - 80, screenHeight / 4 + 80, 20, BLACK);
+                DrawTextEx(customFont, "Enter recipient (username):", Vector2{ screenWidth / 2 - 140.0f, screenHeight / 4 + 50.0f }, 20.0f, 2.0f, BLACK);
+                DrawTextEx(customFont, recipientInput.c_str(), Vector2{ screenWidth / 2 - 80.0f, screenHeight / 4 + 80.0f }, 20.0f, 2.0f, BLACK);
             }
 
             // Check if the mouse is within the transaction window
@@ -137,6 +142,12 @@ void app()
                 amountInput = "";
                 recipientInput = "";
             }
+        }
+
+        // Draw messages
+        for (size_t i = 0; i < messages.size(); ++i)
+        {
+            DrawTextEx(customFont, messages[i].c_str(), Vector2{ 10.0f, screenHeight - 30.0f - (20.0f * i) }, 20.0f, 2.0f, BLACK);
         }
 
         // TODO: Add more interface elements here
@@ -154,42 +165,52 @@ void app()
                 if (transactionState == TransactionState::DEPOSIT)
                 {
                     balance += transactionAmount;
+                    messages.insert(messages.begin(), "Deposited: " + std::to_string(transactionAmount));
                 }
                 else if (transactionState == TransactionState::WITHDRAWAL)
                 {
                     if (balance >= transactionAmount)
                     {
                         balance -= transactionAmount;
+                        messages.insert(messages.begin(), "Withdrawn: " + std::to_string(transactionAmount));
                     }
                     else
                     {
-                        // Handle insufficient balance
+                        messages.insert(messages.begin(), "Insufficient balance for withdrawal.");
                     }
                 }
                 else if (transactionState == TransactionState::MAKE_WILL)
                 {
-                    // Implement logic to make a will, e.g., transfer assets to another user
-                    // For simplicity, let's just print a message
                     if (!recipientInput.empty())
                     {
-                        std::cout << "Will created! Assets transferred to user: " << recipientInput << std::endl;
+                        messages.insert(messages.begin(), "Will created! Assets transferred to user: " + recipientInput);
                     }
                     else
                     {
-                        std::cout << "Please enter a valid recipient username." << std::endl;
+                        messages.insert(messages.begin(), "Please enter a valid recipient username.");
                     }
                 }
 
                 amountInput = "";
                 recipientInput = "";
                 transactionState = TransactionState::NONE;
+
+                // Limit the number of displayed messages
+                if (messages.size() > maxMessages)
+                {
+                    messages.pop_back();
+                }
             }
             catch (const std::exception& e)
             {
                 // Handle or report the exception
+                messages.insert(messages.begin(), "Error: Invalid input.");
             }
         }
     }
+
+    // Unload custom font
+    UnloadFont(customFont);
 
     // De-Initialization
     //--------------------------------------------------------------------------------------
