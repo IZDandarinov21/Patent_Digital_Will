@@ -26,6 +26,9 @@ void app()
     Font customFont = LoadFont("../assets/lato.ttf");
     SetTargetFPS(60);
 
+    Rectangle account1 = { 165.0f, (float)screenHeight - 350.0f, 250, 300 };
+    Rectangle account2 = { 440.0f, (float)screenHeight - 350.0f, 250, 300 };
+
     Rectangle transactionsButton = { 5, 70, 140, 65 };
     Rectangle summaryButton = { 5, 140, 140, 65 };
     Rectangle depositButton = { 5, 220, 140, 50 };
@@ -45,7 +48,6 @@ void app()
 
     Color backgroundColor = { 225, 225, 225, 255 };
     Color blue = { 6, 125, 155, 255 };
-    
 
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
@@ -109,10 +111,31 @@ void app()
 
         // Use custom font
         DrawTextEx(customFont, "Patent Bank", Vector2{ 5.0f, 17.5f }, 27.5f, 2.0f, BLACK);
+        DrawTextEx(customFont, "15-01-2024", Vector2{(float)screenWidth - 150.0f, 17.5f}, 27.5f, 2.0f, BLACK);
         DrawRectangle(0, 60.0f, screenWidth, 5, blue);
         DrawTextEx(customFont, "Welcome, user", Vector2{ 165.0f, 15.0f }, 30.0f, 2.0f, BLACK);
-        DrawTextEx(customFont, "Your accounts:", Vector2{ 167.5f, 60.0f }, 20.0f, 2.0f, BLACK);
+        DrawTextEx(customFont, "Your accounts:", Vector2{ 167.5f, 75.0f }, 20.0f, 2.0f, BLACK);
         //DrawTextEx(customFont, ("Balance: " + to_string(balance) + "$").c_str(), Vector2{7.5f, (float)screenHeight - 75.0f}, 20.0f, 2.0f, BLACK);
+
+        DrawRectangleRec(account1, blue);
+        DrawTextEx(customFont, "Account 1", Vector2{ account1.x + 45.0f, account1.y + 10.0f }, 40.0f, 2.0f, WHITE);
+        DrawTextEx(customFont, "Balance: 500$", Vector2{ account1.x + 5.0f, account1.y + 60.0f }, 30.0f, 2.0f, WHITE);
+        DrawTextEx(customFont, "Transactions: 1", Vector2{ account1.x + 5.0f, account1.y + 100.0f }, 30.0f, 2.0f, WHITE);
+        DrawTextEx(customFont, "Income: +0", Vector2{ account1.x + 5.0f, account1.y + 140.0f }, 30.0f, 2.0f, WHITE);
+        DrawTextEx(customFont, "Expenses: -0", Vector2{ account1.x + 5.0f, account1.y + 180.0f }, 30.0f, 2.0f, WHITE);
+        DrawTextEx(customFont, "15-01-2024", Vector2{ account1.x + 5.0f, account1.y + 265.0f }, 30.0f, 2.0f, WHITE);
+
+
+        DrawRectangleRec(account2, blue);
+        DrawTextEx(customFont, "Account 2", Vector2{ account2.x + 45.0f, account2.y + 10.0f }, 40.0f, 2.0f, WHITE);
+        DrawTextEx(customFont, "Balance: 500$", Vector2{ account2.x + 5.0f, account2.y + 60.0f }, 30.0f, 2.0f, WHITE);
+        DrawTextEx(customFont, "Transactions: 1", Vector2{ account2.x + 5.0f, account2.y + 100.0f }, 30.0f, 2.0f, WHITE);
+        DrawTextEx(customFont, "Income: +0", Vector2{ account2.x + 5.0f, account2.y + 140.0f }, 30.0f, 2.0f, WHITE);
+        DrawTextEx(customFont, "Expenses: -0", Vector2{ account2.x + 5.0f, account2.y + 180.0f }, 30.0f, 2.0f, WHITE);
+        DrawTextEx(customFont, "15-01-2024", Vector2{ account2.x + 5.0f, account2.y + 265.0f }, 30.0f, 2.0f, WHITE);
+
+
+        DrawTextEx(customFont, "Account 2", Vector2{ account2.x + 45.0f, account2.y + 10.0f }, 40.0f, 2.0f, WHITE);
 
         DrawRectangle(0, depositButton.y - 10.0f, 150, 5, blue);
         // Draw buttons
