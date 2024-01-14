@@ -7,7 +7,6 @@ const float loginWidth = 600;
 const float loginHeight = 400;
 const float screenWidth = 1300;
 const float screenHeight = 900;
-
 bool login();
 void main();
 void app();

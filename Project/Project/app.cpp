@@ -20,24 +20,24 @@ void app()
     int screenWidth = 800;
     int screenHeight = 450;
 
-    InitWindow(screenWidth, screenHeight, "Maze Bank");
+    InitWindow(screenWidth, screenHeight, "PATENT Bank");
 
     // Load custom font
-    Font customFont = LoadFont("../assets/lato.ttf");  
+    Font customFont = LoadFont("../assets/lato.ttf");
     SetTargetFPS(60);
 
     Rectangle depositButton = { screenWidth / 2 - 100, screenHeight / 2, 200, 50 };
     Rectangle withdrawalButton = { screenWidth / 2 - 100, screenHeight / 2 + 60, 200, 50 };
     Rectangle makeWillButton = { screenWidth / 2 - 100, screenHeight / 2 + 120, 200, 50 };
 
-    std::string amountInput = "";
-    std::string recipientInput = "";
+    string amountInput = "";
+    string recipientInput = "";
     double balance = 0.0;
     TransactionState transactionState = TransactionState::NONE;
 
     bool makeWillButtonClicked = false;
 
-    std::vector<std::string> messages;
+    vector<string> messages;
     const int maxMessages = 5;
 
     // Main game loop
@@ -101,8 +101,8 @@ void app()
         ClearBackground(RAYWHITE);
 
         // Use custom font
-        DrawTextEx(customFont, "Patent Bank", Vector2{ 10.0f, 10.0f }, 20.0f, 2.0f, LIGHTGRAY);
-        DrawTextEx(customFont, ("Hi, User, Balance: " + std::to_string(balance)).c_str(), Vector2{ static_cast<float>(screenWidth / 2), 10.0f }, 20.0f, 2.0f, LIGHTGRAY);
+        DrawTextEx(customFont, "Patent Bank", Vector2{ 10.0f, 10.0f }, 20.0f, 2.0f, BLACK);
+        DrawTextEx(customFont, ("Hi, User, Balance: " + to_string(balance)).c_str(), Vector2{ static_cast<float>(screenWidth / 2), 10.0f }, 20.0f, 2.0f, LIGHTGRAY);
 
         // Draw buttons
         DrawRectangleRec(depositButton, LIGHTGRAY);
@@ -160,19 +160,19 @@ void app()
         {
             try
             {
-                double transactionAmount = std::stod(amountInput);
+                double transactionAmount = stod(amountInput);
 
                 if (transactionState == TransactionState::DEPOSIT)
                 {
                     balance += transactionAmount;
-                    messages.insert(messages.begin(), "Deposited: " + std::to_string(transactionAmount));
+                    messages.insert(messages.begin(), "Deposited: " + to_string(transactionAmount));
                 }
                 else if (transactionState == TransactionState::WITHDRAWAL)
                 {
                     if (balance >= transactionAmount)
                     {
                         balance -= transactionAmount;
-                        messages.insert(messages.begin(), "Withdrawn: " + std::to_string(transactionAmount));
+                        messages.insert(messages.begin(), "Withdrawn: " + to_string(transactionAmount));
                     }
                     else
                     {
@@ -201,7 +201,7 @@ void app()
                     messages.pop_back();
                 }
             }
-            catch (const std::exception& e)
+            catch (const exception& e)
             {
                 // Handle or report the exception
                 messages.insert(messages.begin(), "Error: Invalid input.");
