@@ -2,7 +2,7 @@
 #include <raylib.h>
 #include <iostream>
 const float loginWidth = 600;
-const float loginHeight = 300;
+const float loginHeight = 400;
 const float screenWidth = 1300;
 const float screenHeight = 900;
 
