@@ -16,6 +16,7 @@ string convertToString(char* arr)
 bool login()
 {
     InitWindow(loginWidth, loginHeight, "PATENT BANK | PLEASE LOG IN . . .");
+    Texture2D logo = LoadTexture("../assets/logo.png");
 
     Font customFont = LoadFont("../assets/lato.ttf");
 
@@ -52,7 +53,8 @@ bool login()
     int backspaceCounter = 0;
     int emailFramesCounter = 0;
     int passwordFramesCounter = 0;
-    Texture2D logo = LoadTexture("../assets/charFront.png");
+   
+    DrawTexture(logo, 200, screenHeight / 2, WHITE);
 
     SetTargetFPS(60);
     while (!WindowShouldClose()) {
@@ -269,6 +271,7 @@ bool login()
         }
         DrawTextEx(customFont, "Sign up", Vector2{ (float)loginWidth / 2 - (float)180, (float)loginHeight / 2 + 120 }, 20, 2, WHITE);
 
+        DrawTexture(logo, 375, 135, WHITE);
 
      
 

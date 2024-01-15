@@ -21,6 +21,7 @@ void app()
     int screenHeight = 450;
 
     InitWindow(screenWidth, screenHeight, "PATENT Bank");
+    Texture2D logo = LoadTexture("../assets/logo.png");
 
     // Load custom font
     Font customFont = LoadFont("../assets/lato.ttf");
@@ -106,7 +107,6 @@ void app()
         // Draw
         //----------------------------------------------------------------------------------
         BeginDrawing();
-
         ClearBackground(backgroundColor);
 
         // Use custom font
