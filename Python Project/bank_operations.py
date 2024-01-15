@@ -1,51 +1,109 @@
 # bank_operations.py
-
+from colorama import Fore, Style
 from user_authentication import get_user_by_names
 from user_authentication import  save_card_holders_to_json
 
 
+def print_deposit_ascii_art():
+    print(Fore.CYAN + Style.BRIGHT + """
+    ************************************
+       Deposit Money to Your Account
+    ************************************
+    """ + Style.RESET_ALL)
+
+
 def deposit(card_holder, list_of_card_holders):
     try:
+        print_deposit_ascii_art()
+
         deposit_amount = float(input("How much do you like to deposit: "))
         card_holder.set_balance(card_holder.get_balance() + deposit_amount)
         card_holder.add_to_history("Deposit", deposit_amount)
-        print("Thank you for your money, your balance is: ", str(card_holder.get_balance()))
+
+        print(
+            Fore.GREEN + f"Thank you for your money! Your balance is: {card_holder.get_balance()} BGN" + Style.RESET_ALL)
 
         # Save updated data to JSON file after deposit
         save_card_holders_to_json(list_of_card_holders, 'card_holders.json')
 
+        print(Fore.MAGENTA + Style.BRIGHT + """
+        ********************************************
+              Enjoy Your Day with Terminal Bank!
+        ********************************************
+        """ + Style.RESET_ALL)
+
     except ValueError:
-        print("Invalid input")
+        print(Fore.RED + "Invalid input. Please enter a valid amount." + Style.RESET_ALL)
+
+
+def print_withdrawal_ascii_art():
+    print(Fore.CYAN + Style.BRIGHT + """
+    **************************************
+       Withdraw Money from Your Account
+    **************************************
+    """ + Style.RESET_ALL)
 
 
 def withdrawal(card_holder, list_of_card_holders):
     try:
-        withdrawal_amount = float(input("How much do you like to withdrawal: "))
+        print_withdrawal_ascii_art()
+
+        withdrawal_amount = float(input("How much do you like to withdraw: "))
+
         if card_holder.get_balance() < withdrawal_amount:
-            print("Insufficient balance :(")
+            print(Fore.RED + "Insufficient balance. Withdrawal canceled." + Style.RESET_ALL)
         else:
             card_holder.set_balance(card_holder.get_balance() - withdrawal_amount)
             card_holder.add_to_history("Withdrawal", withdrawal_amount)
-            print("You're good to go! Thank you :) Your balance is: ", str(card_holder.get_balance()))
+
+            print(Fore.GREEN + f"You're good to go! Your balance is: {card_holder.get_balance()} BGN" + Style.RESET_ALL)
 
             # Save updated data to JSON file after withdrawal
             save_card_holders_to_json(list_of_card_holders, 'card_holders.json')
 
+            print(Fore.MAGENTA + Style.BRIGHT + """
+            ********************************************
+                  Enjoy Your Day with Terminal Bank!
+            ********************************************
+            """ + Style.RESET_ALL)
+
     except ValueError:
-        print("Invalid input")
+        print(Fore.RED + "Invalid input. Please enter a valid amount." + Style.RESET_ALL)
+
+
 
 
 def check_balance_and_transaction_history(card_holder):
+    print(Fore.CYAN + Style.BRIGHT + """
+    ******************************************************
+                    Account Balance and History
+    ******************************************************
+    """ + Style.RESET_ALL)
+
     print("Your current balance is: ", card_holder.get_balance())
     print("\nTransaction History:")
 
-    for transaction_type, amount in card_holder.get_transaction_history():
-        print(f"{transaction_type}: {amount}")
+    for transaction_type, amount, currency in card_holder.get_transaction_history():
+        print(f"{Fore.YELLOW}{transaction_type}:{Fore.GREEN} {amount} {currency}{Style.RESET_ALL}")
+
+    print(Fore.MAGENTA + Style.BRIGHT + """
+                ********************************************
+                      Enjoy Your Day with Terminal Bank!
+                ********************************************
+                """ + Style.RESET_ALL)
+
 
 EXCHANGE_RATES = {'USD': 1.79, 'EUR': 1.96}
 
+def print_transfer_ascii_art():
+    print(Fore.CYAN + Style.BRIGHT + """
+    ****************************************
+               Transfer Money
+    ****************************************
+    """ + Style.RESET_ALL)
+
 def transfer(current_user, list_of_card_holders):
-    print("Transfer Money")
+    print_transfer_ascii_art()
 
     receiver_first_name = input("Enter receiver's first name: ")
     receiver_last_name = input("Enter receiver's last name: ")
@@ -71,7 +129,7 @@ def transfer(current_user, list_of_card_holders):
         if choice == 1:
             # Transfer from spending account to receiver's spending account
             if current_user.get_balance() < transfer_amount:
-                print("Insufficient balance. Transfer canceled.")
+                print(Fore.RED + "Insufficient balance. Transfer canceled." + Style.RESET_ALL)
                 return
 
             current_user.subtract_from_balance(transfer_amount)
@@ -79,91 +137,84 @@ def transfer(current_user, list_of_card_holders):
 
             chosen_currency = 'BGN'
 
-            print("Transfer successful!")
+            print(Fore.GREEN + "Transfer successful!" + Style.RESET_ALL)
             print(f"Sender's Spending Account Balance: {current_user.get_balance()} BGN")
             print(f"Receiver's Spending Account Balance: {receiver.get_balance()} BGN")
 
-
         elif choice == 2:
-
             # Transfer from savings account to receiver's spending account
-
             print("Choose the currency of the savings account:")
-
             print("1. BGN")
-
             print("2. USD")
-
             print("3. EUR")
 
             currency_choice = int(input("Enter your currency choice (1-3): ").strip())
 
             if currency_choice not in [1, 2, 3]:
-                print("Invalid currency choice. Transfer canceled.")
-
+                print(Fore.RED + "Invalid currency choice. Transfer canceled." + Style.RESET_ALL)
                 return
 
             currency_mapping = {1: 'BGN', 2: 'USD', 3: 'EUR'}
-
             chosen_currency = currency_mapping[currency_choice]
 
             sender_savings_balance = current_user.get_savings_balance(chosen_currency)
 
             if sender_savings_balance < transfer_amount:
-                print("Insufficient balance in the chosen currency. Transfer canceled.")
-
+                print(Fore.RED + "Insufficient balance in the chosen currency. Transfer canceled." + Style.RESET_ALL)
                 return
 
             # Update this part to handle transfers in USD and EUR
-
             if chosen_currency == 'BGN':
-
                 current_user.subtract_from_savings_bgn(transfer_amount)
-
                 receiver.add_to_balance(transfer_amount)
-
             elif chosen_currency == 'USD':
-
                 current_user.subtract_from_savings_usd(transfer_amount)
-
                 receiver.add_to_balance(transfer_amount * EXCHANGE_RATES['USD'])
-
             elif chosen_currency == 'EUR':
-
                 current_user.subtract_from_savings_eur(transfer_amount)
-
                 receiver.add_to_balance(transfer_amount * EXCHANGE_RATES['EUR'])
 
-            print("Transfer successful!")
-
-            print(
-                f"Sender's {chosen_currency} Savings Account Balance: {sender_savings_balance - transfer_amount} {chosen_currency}")
-
+            print(Fore.GREEN + "Transfer successful!" + Style.RESET_ALL)
+            print(f"Sender's {chosen_currency} Savings Account Balance: {sender_savings_balance - transfer_amount} {chosen_currency}")
             print(f"Receiver's Spending Account Balance: {receiver.get_balance()} BGN")
 
-
         else:
-            print("Invalid choice. Transfer canceled.")
+            print(Fore.RED + "Invalid choice. Transfer canceled." + Style.RESET_ALL)
 
         # Save updated data to JSON file after the transfer
         save_card_holders_to_json(list_of_card_holders, 'card_holders.json')
 
+        # Add transactions to the transaction history
+        current_user.add_to_history(f"Transfer to {receiver_first_name} {receiver_last_name} ({receiver_card_number})", -transfer_amount, chosen_currency)
+        receiver.add_to_history(f"Transfer from {current_user.get_firstName()} {current_user.get_lastName()} ({current_user.get_cardNum()})", transfer_amount, chosen_currency)
+
+        print(Fore.MAGENTA + Style.BRIGHT + """
+                ********************************************
+                        Have a Great Day with Terminal Bank!
+                ********************************************
+                """ + Style.RESET_ALL)
+
     except ValueError:
-        print("Invalid input. Please enter a valid amount.")
+        print(Fore.RED + "Invalid input. Please enter a valid amount." + Style.RESET_ALL)
 
 
 
-
+def print_expenses_end_ascii_art():
+    print(Fore.MAGENTA + Style.BRIGHT + """
+    **************************************************
+                 Expenses Payment Completed
+    **************************************************
+    """ + Style.RESET_ALL)
 
 def pay_basic_expenses(current_user, list_of_card_holders):
-    print("Paying Basic Living Expenses...")
+    print_expenses_end_ascii_art()
 
     expense_options = {
         1: ("Water Bill", "water", 50.0),
         2: ("Electricity Bill", "electricity", 100.0),
         3: ("Internet Bill", "internet", 30.0),
         4: ("Tax Bills", "tax", 400.0),
-        5: ("Pay all taxes", "all", 580) # Adding a default value for tax
+        5: ("Pay all taxes", "all", 580)  # Adding a default value for tax
     }
 
     # Display available expense options
@@ -195,7 +246,7 @@ def pay_basic_expenses(current_user, list_of_card_holders):
 
                 # Check if the user has sufficient balance
                 if current_user.get_balance() < tax_amount:
-                    print("Insufficient balance. Tax payment canceled.")
+                    print(Fore.RED + "Insufficient balance. Tax payment canceled." + Style.RESET_ALL)
                     return
 
                 print(f"{tax_name} payment of {tax_amount} BGN confirmed!")
@@ -204,14 +255,14 @@ def pay_basic_expenses(current_user, list_of_card_holders):
                 current_user.set_balance(current_user.get_balance() - tax_amount)
                 current_user.add_to_history(f"Tax Payment - {tax_name}", tax_amount)
 
-                print("Payment successful!")
+                print(Fore.GREEN + "Payment successful!" + Style.RESET_ALL)
                 print(f"Remaining balance: {current_user.get_balance()} BGN")
 
                 # Save updated data to JSON file after tax payment
                 save_card_holders_to_json(list_of_card_holders, 'card_holders.json')
 
             else:
-                print("Invalid tax choice. Tax payment canceled.")
+                print(Fore.RED + "Invalid tax choice. Tax payment canceled." + Style.RESET_ALL)
                 return
 
         elif choice in expense_options:
@@ -219,7 +270,7 @@ def pay_basic_expenses(current_user, list_of_card_holders):
 
             # Check if the user has sufficient balance
             if current_user.get_balance() < expense_amount:
-                print("Insufficient balance. Bill payment canceled.")
+                print(Fore.RED + "Insufficient balance. Bill payment canceled." + Style.RESET_ALL)
                 return
 
             print(f"{expense_name} payment of {expense_amount} BGN confirmed!")
@@ -228,17 +279,25 @@ def pay_basic_expenses(current_user, list_of_card_holders):
             current_user.set_balance(current_user.get_balance() - expense_amount)
             current_user.add_to_history(f"Bill Payment - {expense_name}", expense_amount)
 
-            print("Payment successful!")
+            print(Fore.GREEN + "Payment successful!" + Style.RESET_ALL)
             print(f"Remaining balance: {current_user.get_balance()} BGN")
 
             # Save updated data to JSON file after bill payment
             save_card_holders_to_json(list_of_card_holders, 'card_holders.json')
 
         else:
-            print("Invalid choice. Bill payment canceled.")
+            print(Fore.RED + "Invalid choice. Bill payment canceled." + Style.RESET_ALL)
 
     except ValueError:
-        print("Invalid input. Please enter a valid choice.")
+        print(Fore.RED + "Invalid input. Please enter a valid choice." + Style.RESET_ALL)
+
+    print_expenses_end_ascii_art()
+    print(Fore.MAGENTA + Style.BRIGHT + """
+                ********************************************
+                        Have a Great Day with Terminal Bank!
+                ********************************************
+                """ + Style.RESET_ALL)
+
 
 
 

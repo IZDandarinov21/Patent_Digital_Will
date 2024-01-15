@@ -1,11 +1,17 @@
 # saving_account_operations.py
 from user_authentication import save_card_holders_to_json
-
+from colorama import Fore, Style
 EXCHANGE_RATES = {'USD': 1.79, 'EUR': 1.96}
 
+
+
 def savings_account(current_user, list_of_card_holders):
-    print("Savings Account Management")
-    print("1. Transfer from Savings to Main Account")
+    print(Fore.MAGENTA + Style.BRIGHT + """
+                    ********************************************
+                            Savings Account Management
+                    ********************************************
+                    """ + Style.RESET_ALL)
+    print("1. Transfer from Savings to Spending Account")
     print("2. Deposit to Savings Account")
 
     try:
@@ -16,12 +22,21 @@ def savings_account(current_user, list_of_card_holders):
         elif choice == 2:
             deposit_to_savings(current_user, list_of_card_holders)
         else:
-            print("Invalid choice. Exiting Savings Account Management.")
+            print(Fore.RED + "Invalid choice. Exiting Savings Account Management." + Style.RESET_ALL)
     except ValueError:
-        print("Invalid input. Please enter a valid choice.")
+        print(Fore.RED + "Invalid input. Please enter a valid choice." + Style.RESET_ALL)
+
+    print(Fore.MAGENTA + Style.BRIGHT + """
+                    ********************************************
+                            End of Savings Account Management!
+                    ********************************************
+                    """ + Style.RESET_ALL)
+
+
+
 
 def transfer_from_savings(current_user, list_of_card_holders):
-    print("Transfer from Savings to Main Account")
+    print(Fore.BLUE + Style.BRIGHT + "Transfer from Savings to Main Account" + Style.RESET_ALL)
 
     print("Choose the currency from which to transfer:")
     print("1. BGN")
@@ -41,10 +56,10 @@ def transfer_from_savings(current_user, list_of_card_holders):
         elif currency_choice == 4:
             currency = input("Enter the target currency (e.g., USD, EUR): ").strip().upper()
             if currency not in EXCHANGE_RATES:
-                print("Invalid currency. Transfer canceled.")
+                print(Fore.RED + "Invalid currency. Transfer canceled." + Style.RESET_ALL)
                 return
         else:
-            print("Invalid choice. Transfer canceled.")
+            print(Fore.RED + "Invalid choice. Transfer canceled." + Style.RESET_ALL)
             return
 
         print(f"Current Savings Account Balance ({currency}): {current_user.get_savings_balance(currency)}")
@@ -52,10 +67,10 @@ def transfer_from_savings(current_user, list_of_card_holders):
         try:
             transfer_amount = float(input(f"Enter the amount to transfer from Savings to Main Account in {currency}: "))
             if transfer_amount <= 0 or transfer_amount > current_user.get_savings_balance(currency):
-                print("Invalid transfer amount. Please enter a valid amount.")
+                print(Fore.RED + "Invalid transfer amount. Please enter a valid amount." + Style.RESET_ALL)
                 return
         except ValueError:
-            print("Invalid input. Please enter a valid amount.")
+            print(Fore.RED + "Invalid input. Please enter a valid amount." + Style.RESET_ALL)
             return
 
         # Update balances and transaction history based on the chosen currency
@@ -85,29 +100,27 @@ def transfer_from_savings(current_user, list_of_card_holders):
         # Save the updated data to the JSON file
         save_card_holders_to_json(list_of_card_holders, 'card_holders.json')
 
-        print("Transfer successful!")
+        print(Fore.GREEN + "Transfer successful!" + Style.RESET_ALL)
         print(f"Amount transferred to Main Account: {transfer_amount} {currency}")
         print(f"Main Account Balance: {current_user.get_balance()}")
         print(f"Savings Account Balance ({currency}): {current_user.get_savings_balance(currency)}")
 
     except ValueError:
-        print("Invalid input. Transfer canceled.")
-
-
+        print(Fore.RED + "Invalid input. Transfer canceled." + Style.RESET_ALL)
 
 
 def deposit_to_savings(current_user, list_of_card_holders):
     try:
         amount = float(input("Enter the amount to deposit to Savings Account (BGN): "))
         if amount <= 0:
-            print("Invalid amount. Please enter a positive value.")
+            print(Fore.RED + "Invalid amount. Please enter a positive value." + Style.RESET_ALL)
             return
     except ValueError:
-        print("Invalid input. Please enter a valid amount.")
+        print(Fore.RED + "Invalid input. Please enter a valid amount." + Style.RESET_ALL)
         return
 
     if amount > current_user.get_balance():
-        print("Insufficient funds. Cannot deposit more than the available balance.")
+        print(Fore.RED + "Insufficient funds. Cannot deposit more than the available balance." + Style.RESET_ALL)
         return
 
     print("Do you want to deposit in another currency?")
@@ -129,17 +142,18 @@ def deposit_to_savings(current_user, list_of_card_holders):
 
             print_deposit_message("BGN", amount, amount, current_user)
         else:
-            print("Invalid choice. Money will be kept in leva.")
+            print(Fore.RED + "Invalid choice. Money will be kept in leva." + Style.RESET_ALL)
 
     except ValueError:
-        print("Invalid input. Please enter a valid choice.")
+        print(Fore.RED + "Invalid input. Please enter a valid choice." + Style.RESET_ALL)
+
 
 
 def deposit_in_currency(current_user, amount, list_of_card_holders):
     currency = input("Enter the currency (e.g., EUR, USD): ").strip().upper()
 
     if currency not in EXCHANGE_RATES:
-        print("Invalid currency. Money will be kept in leva.")
+        print(Fore.RED + "Invalid currency. Money will be kept in leva." + Style.RESET_ALL)
         return
 
     exchange_rate = EXCHANGE_RATES[currency]
@@ -163,12 +177,13 @@ def deposit_in_currency(current_user, amount, list_of_card_holders):
 
     print_deposit_message(currency, amount, equivalent_amount_in_leva, current_user)
 
-def print_deposit_message(currency, amount, equivalent_amount_in_leva, current_user):
-    print(f"Deposit to Savings successful!")
-    print(f"Amount deposited to Savings Account in {currency}: {amount} {currency}")
-    print(f"Equivalent amount in BGN (Leva): {equivalent_amount_in_leva} BGN")
-    print(f"Main Account Balance: {current_user.get_balance()} BGN")
+def print_deposit_message(currency, deposited_amount, equivalent_amount, current_user):
+    print(Fore.GREEN + "Deposit successful!" + Style.RESET_ALL)
+    print(f"Deposited: {deposited_amount} {currency}")
+    print(f"Equivalent amount in BGN: {equivalent_amount} BGN")
     print(f"Savings Account Balance ({currency}): {current_user.get_savings_balance(currency)} {currency}")
+
+
 
 
 

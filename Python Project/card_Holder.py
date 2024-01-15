@@ -61,8 +61,8 @@ class Card_Holder:
     def set_balance(self, newVal):
         self.balance = newVal
 
-    def add_to_history(self, transaction_type, amount):
-        self.transaction_history.append((transaction_type, amount))
+    def add_to_history(self, transaction_type, amount, currency=None):
+        self.transaction_history.append((transaction_type, amount, currency))
 
     def get_transaction_history(self):
         return self.transaction_history

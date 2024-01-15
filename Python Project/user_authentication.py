@@ -1,10 +1,16 @@
 # user_authentication.py
-
 import json
+from colorama import Fore, Style
 from card_Holder import Card_Holder
 
 
 def authenticate_user(card_holders_list):
+    print(Fore.GREEN + Style.BRIGHT + """
+    ************************************
+            Debit Card Authentication
+    ************************************
+    """ + Style.RESET_ALL)
+
     while True:
         try:
             debit_card_num = input("Please insert your debit card number: ")
@@ -15,11 +21,13 @@ def authenticate_user(card_holders_list):
             if len(matched_users) > 0:
                 return matched_users[0]
             else:
-                print("Invalid card number or PIN. Please try again.")
+                print(Fore.RED + "Invalid card number or PIN. Please try again." + Style.RESET_ALL)
         except ValueError:
-            print("Invalid input. Please enter a valid card number and PIN.")
+            print(Fore.RED + "Invalid input. Please enter a valid card number and PIN." + Style.RESET_ALL)
         except IndexError:
-            print("Invalid card number or PIN. Please try again.")
+            print(Fore.RED + "Invalid card number or PIN. Please try again." + Style.RESET_ALL)
+
+
 
 
 def load_card_holders_from_json(filename):
@@ -72,27 +80,39 @@ def save_card_holders_to_json(card_holders, filename):
         json.dump(card_holders_data, file, indent=2)
 
 
+
 def get_user_pin(current_user):
+    print(Fore.GREEN + Style.BRIGHT + """
+    ************************************
+            User PIN Verification
+    ************************************
+    """ + Style.RESET_ALL)
+
     while True:
         try:
             user_pin = int(input("Please enter your PIN: ").strip())
             if current_user.get_pin() == user_pin:
                 return True
             else:
-                print("Invalid PIN. Please try again.")
+                print(Fore.RED + "Invalid PIN. Please try again." + Style.RESET_ALL)
         except ValueError:
-            print("Invalid PIN. Please try again.")
+            print(Fore.RED + "Invalid PIN. Please try again." + Style.RESET_ALL)
+
 
 
 def get_user_by_names(first_name, last_name, card_number, card_holders_list):
+
+
     for holder in card_holders_list:
         if (
             holder.get_firstName().lower() == first_name.lower()
             and holder.get_lastName().lower() == last_name.lower()
             and holder.get_cardNum() == card_number
         ):
-            print("Match found!")
+            print(Fore.GREEN + "Match found!" + Style.RESET_ALL)
             return holder
 
-    print("No match found.")
+    print(Fore.RED + "No match found." + Style.RESET_ALL)
     return None
+
+

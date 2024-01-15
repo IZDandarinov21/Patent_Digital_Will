@@ -1,10 +1,18 @@
 from user_authentication import get_user_by_names
-from user_authentication import  save_card_holders_to_json
+from colorama import Fore, Style
+from user_authentication import save_card_holders_to_json
 from card_Holder import Card_Holder
 import random
 
+def print_create_account_ascii_art():
+    print(Fore.CYAN + Style.BRIGHT + """
+    ************************************
+        Creating a New Account
+    ************************************
+    """ + Style.RESET_ALL)
+
 def create_account(list_of_card_holders):
-    print("Creating a new account...")
+    print_create_account_ascii_art()
 
     # Generate a random card number (you may need a more sophisticated method)
     new_card_num = ''.join([str(random.randint(0, 9)) for _ in range(16)])
@@ -47,15 +55,26 @@ def create_account(list_of_card_holders):
     # Save the updated list to the JSON file
     save_card_holders_to_json(list_of_card_holders, 'card_holders.json')
 
-    print("Account created successfully!")
+    print(Fore.GREEN + Style.BRIGHT + "Account created successfully!" + Style.RESET_ALL)
     print(f"Card Number: {new_card_num}")
     print(f"PIN: {new_pin}")
     print("Please remember these details for future logins.")
 
+# Example usage:
+# create_account(list_of_card_holders)
 
+
+
+
+def print_close_account_ascii_art():
+    print(Fore.RED + Style.BRIGHT + """
+    ************************************
+          Closing Your Account
+    ************************************
+    """ + Style.RESET_ALL)
 
 def close_account(current_user, card_holders_list):
-    print("Closing your account...")
+    print_close_account_ascii_art()
 
     # Ask the user how they want to handle the remaining balance
     print("Choose an option:")
@@ -123,7 +142,18 @@ def close_account(current_user, card_holders_list):
 
 EXCHANGE_RATES = {'USD': 1.79, 'EUR': 1.96}
 
+
+def print_transfer_for_closing_account_ascii_art():
+    print(Fore.CYAN + Style.BRIGHT + """
+    ****************************************
+            Transfer for Closing Account
+    ****************************************
+    """ + Style.RESET_ALL)
+
+
 def transfer_for_closing_account(sender, list_of_card_holders):
+    print_transfer_for_closing_account_ascii_art()
+
     print("Enter receiver's information:")
     receiver_first_name = input("Receiver's first name: ")
     receiver_last_name = input("Receiver's last name: ")
@@ -132,7 +162,7 @@ def transfer_for_closing_account(sender, list_of_card_holders):
     receiver = get_user_by_names(receiver_first_name, receiver_last_name, receiver_card_num, list_of_card_holders)
 
     if receiver is None:
-        print(f"Receiver {receiver_first_name} {receiver_last_name} not found in the list of card holders.")
+        print(Fore.RED + f"Receiver {receiver_first_name} {receiver_last_name} not found in the list of card holders." + Style.RESET_ALL)
         return
 
     # Calculate the total amount to be transferred
@@ -160,7 +190,7 @@ def transfer_for_closing_account(sender, list_of_card_holders):
     # Add a transaction history entry for the total received
     receiver.add_to_history(f"Received from {sender.get_firstName()} {sender.get_lastName()}", total_amount)
 
-    print("Transfer successful!")
+    print(Fore.GREEN + "Transfer successful!" + Style.RESET_ALL)
     print(f"Sender's balance: {sender.get_balance()}")
     print(f"Receiver's balance: {receiver.get_balance()}")
 
@@ -170,7 +200,16 @@ def transfer_for_closing_account(sender, list_of_card_holders):
 
 
 
+def print_change_user_info_ascii_art():
+    print(Fore.YELLOW + Style.BRIGHT + """
+    ****************************************
+            Change User Information
+    ****************************************
+    """ + Style.RESET_ALL)
+
 def change_user_info(current_user, list_of_card_holders):
+    print_change_user_info_ascii_art()
+
     print("Select what you want to change:")
     print("1. First Name")
     print("2. Last Name")
@@ -182,13 +221,13 @@ def change_user_info(current_user, list_of_card_holders):
         if choice == 1:
             new_value = input("Enter your new first name: ").strip()  # Limit to 10 characters
             if len(new_value) > 10:
-                print("Invalid name length. Maximum length is 10 characters. Please try again.")
+                print(Fore.RED + "Invalid name length. Maximum length is 10 characters. Please try again." + Style.RESET_ALL)
                 return
             current_user.set_firstName(new_value)
         elif choice == 2:
             new_value = input("Enter your new last name: ").strip()  # Limit to 10 characters
             if len(new_value) > 10:
-                print("Invalid name length. Maximum length is 10 characters. Please try again.")
+                print(Fore.RED + "Invalid name length. Maximum length is 10 characters. Please try again." + Style.RESET_ALL)
                 return
             current_user.set_lastName(new_value)
         elif choice == 3:
@@ -197,18 +236,24 @@ def change_user_info(current_user, list_of_card_holders):
             if 1000 <= new_value <= 9999:
                 current_user.set_pin(new_value)
             else:
-                print("Invalid PIN. Please enter a 4-digit PIN.")
+                print(Fore.RED + "Invalid PIN. Please enter a 4-digit PIN." + Style.RESET_ALL)
                 return
         else:
-            print("Invalid choice. Please enter a number between 1 and 3.")
+            print(Fore.RED + "Invalid choice. Please enter a number between 1 and 3." + Style.RESET_ALL)
             return
 
-        print("User information changed successfully!")
+        print(Fore.GREEN + "User information changed successfully!" + Style.RESET_ALL)
 
         # Save updated data to JSON file after changing user info
         save_card_holders_to_json(list_of_card_holders, 'card_holders.json')
 
+        print(Fore.MAGENTA + Style.BRIGHT + """
+                        ********************************************
+                                   End of changing user information!
+                        ********************************************
+                        """ + Style.RESET_ALL)
+
     except ValueError:
-        print("Invalid input. Please enter valid information.")
+        print(Fore.RED + "Invalid input. Please enter valid information." + Style.RESET_ALL)
 
 
