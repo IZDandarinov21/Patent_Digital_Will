@@ -15,13 +15,21 @@ string convertToString(char* arr)
 
 bool login()
 {
+    InitWindow(loginWidth, loginHeight, "PATENT BANK | PLEASE LOG IN . . .");
+
     Font customFont = LoadFont("../assets/lato.ttf");
 
     // Sample login info
 
     LOGIN_INFO accounts[10];
-    accounts[0].email = "joro@gmail.com";
+    accounts[0].email = "john.smith@gmail.com";
     accounts[0].password = "123456";
+
+    accounts[1].email = "mag.papazov@abv.com";
+    accounts[1].password = "AudiA8";
+
+    accounts[2].email = "admin@patent.mail";
+    accounts[2].password = "admin123";
 
     bool isTyping[2] = { 0 , 0 };
 
@@ -40,9 +48,11 @@ bool login()
     Rectangle emailInputBox = { 15, loginHeight / 2 - 100, 275, 30 };
     Rectangle passwordInputBox = { 15, loginHeight / 2 - 25, 275, 30 };
 
+
     int backspaceCounter = 0;
     int emailFramesCounter = 0;
     int passwordFramesCounter = 0;
+    Texture2D logo = LoadTexture("../assets/charFront.png");
 
     SetTargetFPS(60);
     while (!WindowShouldClose()) {
@@ -190,7 +200,7 @@ bool login()
 
         
 
-
+        DrawTextEx(customFont, "PATENT BANK", Vector2{ (float)15.0f, 20.0f }, 40, 2, BLACK);
 
         //Color inputBorderColor = { 240, 240, 240, 90 };
         ClearBackground(backgroundColor);
@@ -214,7 +224,7 @@ bool login()
             }
         }
         ///////////////////////////////////////////////////////
-
+        DrawTexture(logo, 200, screenHeight / 2, BLACK);
 
         ///////////////////// PASSWORD INPUT //////////////////
         DrawTextEx(customFont, "Password:", Vector2{ (float)15, (float)loginHeight / 2 - 50 }, 20, 2, BLACK);
@@ -237,7 +247,7 @@ bool login()
         ///////////////////////////////////////////////////////
 
         // LOGIN BUTTON
-        DrawRectangle(15, loginHeight / 2 + 50, 250, 40, loginButtonColor);
+        DrawRectangle(15, loginHeight / 2 + 50, 275, 40, loginButtonColor);
         
         if (CheckCollisionPointRec(GetMousePosition(), { 15, loginHeight / 2 + 50, 250, 40 }))
         {
@@ -245,22 +255,22 @@ bool login()
             {
                 return true;
             }
-            DrawRectangle(15, loginHeight / 2 + 50, 250, 40, loginButtonColorPressed);
+            DrawRectangle(15, loginHeight / 2 + 50, 275, 40, loginButtonColorPressed);
         }
-        DrawTextEx(customFont, "Login", Vector2{ (float)loginWidth / 2 - 185, (float)loginHeight / 2 + 60 }, 20, 2, WHITE);
+        DrawTextEx(customFont, "Login", Vector2{ (float)loginWidth / 2 - (float)172.5, (float)loginHeight / 2 + 60 }, 20, 2, WHITE);
 
         // SIGN UP BUTTON
 
-        DrawRectangle(15, loginHeight / 2 + 110, 250, 40, loginButtonColor);
+        DrawRectangle(15, loginHeight / 2 + 110, 275, 40, loginButtonColor);
 
         if (CheckCollisionPointRec(GetMousePosition(), { 15, loginHeight / 2 + 110, 250, 40 }))
         {
-            DrawRectangle(15, loginHeight / 2 + 110, 250, 40, loginButtonColorPressed);
+            DrawRectangle(15, loginHeight / 2 + 110, 275, 40, loginButtonColorPressed);
         }
-        DrawTextEx(customFont, "Sign up", Vector2{ (float)loginWidth / 2 - (float)192.5, (float)loginHeight / 2 + 120 }, 20, 2, WHITE);
+        DrawTextEx(customFont, "Sign up", Vector2{ (float)loginWidth / 2 - (float)180, (float)loginHeight / 2 + 120 }, 20, 2, WHITE);
 
 
-
+     
 
         EndDrawing();
     }
