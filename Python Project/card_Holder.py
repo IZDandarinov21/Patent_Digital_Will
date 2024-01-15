@@ -129,3 +129,6 @@ class Card_Holder:
         else:
             print("Insufficient funds in the spending account.")
 
+
+    def add_to_balance(self, amount):
+        self.balance += amount

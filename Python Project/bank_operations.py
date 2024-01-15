@@ -37,65 +37,122 @@ def withdrawal(card_holder, list_of_card_holders):
 
 def check_balance_and_transaction_history(card_holder):
     print("Your current balance is: ", card_holder.get_balance())
-    print("Deposit History: ")
-    for transaction in card_holder.get_transaction_history():
-        if transaction[0] == "Deposit":
-            print(transaction)
-    print("\nWithdrawal History: ")
-    for transaction in card_holder.get_transaction_history():
-        if transaction[0] == "Withdrawal":
-            print(transaction)
+    print("\nTransaction History:")
 
+    for transaction_type, amount in card_holder.get_transaction_history():
+        print(f"{transaction_type}: {amount}")
+
+EXCHANGE_RATES = {'USD': 1.79, 'EUR': 1.96}
 
 def transfer(current_user, list_of_card_holders):
-    print("Enter sender's information:")
-    sender_first_name = input("Sender's first name: ")
-    sender_last_name = input("Sender's last name: ")
-    sender_card_num = input("Sender's card number: ")
+    print("Transfer Money")
 
-    sender = get_user_by_names(sender_first_name, sender_last_name, sender_card_num, list_of_card_holders)
+    receiver_first_name = input("Enter receiver's first name: ")
+    receiver_last_name = input("Enter receiver's last name: ")
+    receiver_card_number = input("Enter receiver's card number: ")
 
-    if sender is None:
-        print(f"Sender {sender_first_name} {sender_last_name} not found in the list of card holders.")
+    receiver = get_user_by_names(receiver_first_name, receiver_last_name, receiver_card_number, list_of_card_holders)
+
+    if not receiver:
+        print("Receiver not found.")
         return
 
-    print("Enter receiver's information:")
-    receiver_first_name = input("Receiver's first name: ")
-    receiver_last_name = input("Receiver's last name: ")
-    receiver_card_num = input("Receiver's card number: ")
+    try:
+        transfer_amount = float(input("Enter the amount to transfer: "))
 
-    receiver = get_user_by_names(receiver_first_name, receiver_last_name, receiver_card_num, list_of_card_holders)
+        print("Choose the account from which you want to transfer:")
+        print("1. Spending Account")
+        print("2. Savings Account")
 
-    if receiver is None:
-        print(f"Receiver {receiver_first_name} {receiver_last_name} not found in the list of card holders.")
-        return
+        choice = int(input("Enter your choice (1-2): ").strip())
 
-    while True:
-        try:
-            amount = float(input("Enter the amount to be sent: "))
-            break
-        except ValueError:
-            print("Invalid input. Please enter a valid amount.")
+        chosen_currency = None  # Declare chosen_currency outside the if block
 
-    sender_balance = sender.get_balance()
+        if choice == 1:
+            # Transfer from spending account to receiver's spending account
+            if current_user.get_balance() < transfer_amount:
+                print("Insufficient balance. Transfer canceled.")
+                return
 
-    if sender_balance < amount:
-        print("Insufficient balance. Transaction canceled.")
-        return
+            current_user.subtract_from_balance(transfer_amount)
+            receiver.add_to_balance(transfer_amount)
 
-    sender.set_balance(sender_balance - amount)
-    sender.add_to_history(f"Transfer to {receiver.get_firstName()} {receiver.get_lastName()}", amount)
+            chosen_currency = 'BGN'
 
-    receiver_balance = receiver.get_balance()
-    receiver.set_balance(receiver_balance + amount)
-    receiver.add_to_history(f"Received from {sender.get_firstName()} {sender.get_lastName()}", amount)
+            print("Transfer successful!")
+            print(f"Sender's Spending Account Balance: {current_user.get_balance()} BGN")
+            print(f"Receiver's Spending Account Balance: {receiver.get_balance()} BGN")
 
-    print("Transfer successful!")
-    print(f"Sender's balance: {sender.get_balance()}")
-    print(f"Receiver's balance: {receiver.get_balance()}")
 
-    # Save updated data to JSON file when modifying something
-    save_card_holders_to_json(list_of_card_holders, 'card_holders.json')
+        elif choice == 2:
+
+            # Transfer from savings account to receiver's spending account
+
+            print("Choose the currency of the savings account:")
+
+            print("1. BGN")
+
+            print("2. USD")
+
+            print("3. EUR")
+
+            currency_choice = int(input("Enter your currency choice (1-3): ").strip())
+
+            if currency_choice not in [1, 2, 3]:
+                print("Invalid currency choice. Transfer canceled.")
+
+                return
+
+            currency_mapping = {1: 'BGN', 2: 'USD', 3: 'EUR'}
+
+            chosen_currency = currency_mapping[currency_choice]
+
+            sender_savings_balance = current_user.get_savings_balance(chosen_currency)
+
+            if sender_savings_balance < transfer_amount:
+                print("Insufficient balance in the chosen currency. Transfer canceled.")
+
+                return
+
+            # Update this part to handle transfers in USD and EUR
+
+            if chosen_currency == 'BGN':
+
+                current_user.subtract_from_savings_bgn(transfer_amount)
+
+                receiver.add_to_balance(transfer_amount)
+
+            elif chosen_currency == 'USD':
+
+                current_user.subtract_from_savings_usd(transfer_amount)
+
+                receiver.add_to_balance(transfer_amount * EXCHANGE_RATES['USD'])
+
+            elif chosen_currency == 'EUR':
+
+                current_user.subtract_from_savings_eur(transfer_amount)
+
+                receiver.add_to_balance(transfer_amount * EXCHANGE_RATES['EUR'])
+
+            print("Transfer successful!")
+
+            print(
+                f"Sender's {chosen_currency} Savings Account Balance: {sender_savings_balance - transfer_amount} {chosen_currency}")
+
+            print(f"Receiver's Spending Account Balance: {receiver.get_balance()} BGN")
+
+
+        else:
+            print("Invalid choice. Transfer canceled.")
+
+        # Save updated data to JSON file after the transfer
+        save_card_holders_to_json(list_of_card_holders, 'card_holders.json')
+
+    except ValueError:
+        print("Invalid input. Please enter a valid amount.")
+
+
+
 
 
 def pay_basic_expenses(current_user, list_of_card_holders):

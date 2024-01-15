@@ -86,7 +86,6 @@ def get_user_pin(current_user):
 
 def get_user_by_names(first_name, last_name, card_number, card_holders_list):
     for holder in card_holders_list:
-        print(f"Checking {holder.get_firstName()} {holder.get_lastName()} with card number {holder.get_cardNum()}")
         if (
             holder.get_firstName().lower() == first_name.lower()
             and holder.get_lastName().lower() == last_name.lower()
