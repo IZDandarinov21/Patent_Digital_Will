@@ -9,18 +9,16 @@ int backspaceCounter = 0;
 int backspaceHoldDown = 0;
 int charCountGlobal[2] = { 0 , 0 };
 
-struct LOGIN_INFO 
-{
-    string email;
-    string password;
-};
-
 string convertToString(char* arr)
 {
     string str = arr;
     return str;
 }
-
+struct LOGIN_INFO
+{
+    string email;
+    string password;
+};
 bool clickInput(Rectangle inputBox, bool isTyping)
 {
     if (CheckCollisionPointRec(GetMousePosition(), inputBox))
@@ -113,6 +111,9 @@ bool login()
     LOGIN_INFO accounts[10];
     accounts[0].email = "john@gmail.com";
     accounts[0].password = "123456";
+
+    accounts[1].email = "joro@gmail.com";
+    accounts[1].password = "654321";
 
     // EMAIL INPUT BOX
     char emailInput[MAX_INPUT_CHARS + 1] = "\0";
@@ -223,7 +224,19 @@ bool login()
         {
             if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
             {
-                return true;
+                string emailStr = emailInput;
+                string passwordStr = passwordInput;
+                string emailsArr[10];
+                string passwordsArr[10];
+                for (int i = 0; i < 2; i++)
+                {
+                    emailsArr[i] = accounts[i].email;
+                    passwordsArr[i] = accounts[i].password;
+                }
+                if (searchAccounts(emailStr, passwordStr, emailsArr, passwordsArr))
+                {
+                    return true;
+                }
             }
             DrawRectangleRounded(loginButton, 10.0f, 0, loginButtonColorPressed);
         }
@@ -239,6 +252,15 @@ bool login()
         }
         DrawTextEx(customFont, "Sign up", Vector2{ (float)loginWidth / 2 - (float)180, (float)loginHeight / 2 + 120 }, 20, 2, WHITE);
 
+
+
+        // Forgot password
+
+        DrawTextEx(customFont, "Forgot password?", Vector2{ (float)5.0f, (float)loginHeight - 25.0f }, 20, 1, BLACK);
+        if (CheckCollisionPointRec(GetMousePosition(), { 5.0f, (float)loginHeight - 25.0f, 140, 20 }))
+        {
+            DrawTextEx(customFont, "Forgot password?", Vector2{ (float)5.0f, (float)loginHeight - 25.0f }, 20, 1, loginButtonColorPressed);
+        }
 
 
 

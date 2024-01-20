@@ -132,6 +132,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="accounts.cpp" />
     <ClCompile Include="app.cpp" />
     <ClCompile Include="login.cpp" />
     <ClCompile Include="main.cpp" />

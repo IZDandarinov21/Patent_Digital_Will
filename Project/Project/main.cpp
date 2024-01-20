@@ -5,7 +5,7 @@ void main()
 
 
     bool loginSuccess = login();
-    app();
+    if(loginSuccess) app();
 
 
     //CloseWindow();

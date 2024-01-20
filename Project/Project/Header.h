@@ -10,3 +10,4 @@ const float screenHeight = 900;
 bool login();
 void main();
 void app();
+bool searchAccounts(string input_Email, string input_Password, string emails[], string passwords[]);
