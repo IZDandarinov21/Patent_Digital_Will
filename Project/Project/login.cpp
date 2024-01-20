@@ -2,6 +2,7 @@
 #define MAX_INPUT_CHARS 24
 Rectangle emailInputBox = { 15, loginHeight / 2 - 100, 275, 30 };
 Rectangle passwordInputBox = { 15, loginHeight / 2 - 25, 275, 30 };
+char passwordInputHidden[MAX_INPUT_CHARS + 1] = "\0";
 bool isTypingGlobal[2] = { 0 , 0 };
 int framesCounter = 0;
 int backspaceCounter = 0;
@@ -20,9 +21,8 @@ string convertToString(char* arr)
     return str;
 }
 
-bool getInput(Rectangle inputBox, bool isTyping, char inputArr[], int charCount)
+bool clickInput(Rectangle inputBox, bool isTyping)
 {
-
     if (CheckCollisionPointRec(GetMousePosition(), inputBox))
     {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && isTyping == 0)
@@ -37,6 +37,13 @@ bool getInput(Rectangle inputBox, bool isTyping, char inputArr[], int charCount)
     }
 
     if (CheckCollisionPointRec(GetMousePosition(), inputBox)) SetMouseCursor(MOUSE_CURSOR_IBEAM);
+    return isTyping;
+}
+
+void getInput(Rectangle inputBox, bool isTyping, char inputArr[], int charCount)
+{
+
+
     if (isTyping == 1)
     {
 
@@ -49,6 +56,7 @@ bool getInput(Rectangle inputBox, bool isTyping, char inputArr[], int charCount)
             if ((key >= 32) && (key <= 125) && (charCount < MAX_INPUT_CHARS))
             {
                 inputArr[charCount] = (char)key;
+                if (isTypingGlobal[1] == 1) passwordInputHidden[charCount] = '*';
                 inputArr[charCount + 1] = '\0'; // Add null terminator at the end of the string.
                 charCount++;
             }
@@ -65,6 +73,7 @@ bool getInput(Rectangle inputBox, bool isTyping, char inputArr[], int charCount)
                     charCount--;
                     if (charCount < 0) charCount = 0;
                     inputArr[charCount] = '\0';
+                    if(isTypingGlobal[1] == 1) passwordInputHidden[charCount] = '\0';
                     backspaceHoldDown = 0;
                 }
 
@@ -78,6 +87,7 @@ bool getInput(Rectangle inputBox, bool isTyping, char inputArr[], int charCount)
             charCount--;
             if (charCount < 0) charCount = 0;
             inputArr[charCount] = '\0';
+            if (isTypingGlobal[1] == 1) passwordInputHidden[charCount] = '\0';
         }
     }
   
@@ -86,10 +96,9 @@ bool getInput(Rectangle inputBox, bool isTyping, char inputArr[], int charCount)
     if (isTypingGlobal[0] == 1) {
         charCountGlobal[0] = charCount;
     }
-    if (isTypingGlobal[1] == 1) {
+    else if (isTypingGlobal[1] == 1) {
         charCountGlobal[1] = charCount;
     }
-    return isTyping;
 }
 
 bool login()
@@ -111,7 +120,6 @@ bool login()
 
     // LOGIN INPUT BOX
     char passwordInput[MAX_INPUT_CHARS + 1] = "\0";
-    char passwordInputHidden[MAX_INPUT_CHARS + 1] = "\0";
     int passwordCharCount = 0;
     int backspaceHoldDown = 0;
     
@@ -147,8 +155,14 @@ bool login()
         ///////////////////// EMAIL INPUT /////////////////////
         DrawTextEx(customFont, "Email:", Vector2{ (float)15, (float)loginHeight / 2 - 125 }, 20, 2, BLACK);
         DrawRectangle(15, loginHeight / 2 - 100, 275, 30, WHITE);
-        if (CheckCollisionPointRec(GetMousePosition(), emailInputBox) || isTypingGlobal[0] == 1) {
-            isTypingGlobal[0] = getInput(emailInputBox, isTypingGlobal[0], emailInput, charCountGlobal[0]);
+
+        if (CheckCollisionPointRec(GetMousePosition(), emailInputBox) || isTypingGlobal[0] == 1)
+        {
+            isTypingGlobal[0] = clickInput(emailInputBox, isTypingGlobal[0]);
+        }
+
+        if (isTypingGlobal[0] == 1) {
+            getInput(emailInputBox, isTypingGlobal[0], emailInput, charCountGlobal[0]);
         }
         DrawRectangleLines((int)emailInputBox.x, (int)emailInputBox.y, (int)emailInputBox.width, (int)emailInputBox.height, DARKGRAY);
         DrawTextEx(customFont, emailInput, Vector2{ (float)emailInputBox.x + 5, (float)emailInputBox.y + 4 }, 20, 2, BLACK);
@@ -165,10 +179,20 @@ bool login()
         DrawTextEx(customFont, "Password:", Vector2{ (float)15, (float)loginHeight / 2 - 50 }, 20, 2, BLACK);
         DrawRectangle(15, loginHeight / 2 - 25, 275, 30, WHITE);
 
-        if (CheckCollisionPointRec(GetMousePosition(), passwordInputBox)) DrawRectangleLines((int)passwordInputBox.x, (int)passwordInputBox.y, (int)passwordInputBox.width, (int)passwordInputBox.height, BLACK);
-        else DrawRectangleLines((int)passwordInputBox.x, (int)passwordInputBox.y, (int)passwordInputBox.width, (int)passwordInputBox.height, DARKGRAY);
-
+        if (CheckCollisionPointRec(GetMousePosition(), passwordInputBox) || isTypingGlobal[1] == 1)
+        {
+            isTypingGlobal[1] = clickInput(passwordInputBox, isTypingGlobal[1]);
+        }
+        if (isTypingGlobal[1] == 1) {
+            getInput(passwordInputBox, isTypingGlobal[1], passwordInput, charCountGlobal[1]);
+        }
+        DrawRectangleLines((int)passwordInputBox.x, (int)passwordInputBox.y, (int)passwordInputBox.width, (int)passwordInputBox.height, DARKGRAY);
         DrawText(passwordInputHidden, (int)passwordInputBox.x + 5, (int)passwordInputBox.y + 4, 20, BLACK);
+        if (isTypingGlobal[1] == 1)
+        {
+            if (((framesCounter / 20) % 2) == 0) DrawText("|", (int)passwordInputBox.x + 8 + MeasureText(passwordInput, 20), (int)passwordInputBox.y + 6, 20, BLACK);
+
+        }
 
         
 
@@ -177,14 +201,7 @@ bool login()
         {
             framesCounter = 0;
         }
-        if (isTypingGlobal[0] == 0)
-        {
-            DrawTextEx(customFont, "Password:", Vector2{ (float)15, (float)loginHeight / 2 - 50 }, 20, 2, RED);
-        }
       
-
-                DrawTextEx(customFont, ("Frame time: " + to_string(framesCounter)).c_str(), Vector2{ (float)155, (float)loginHeight / 2 - 125 }, 20, 2, BLACK);
-
 
         // LOGIN BUTTON
         DrawRectangle(15, loginHeight / 2 + 50, 275, 40, loginButtonColor);
