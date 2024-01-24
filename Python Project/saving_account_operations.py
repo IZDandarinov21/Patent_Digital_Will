@@ -36,7 +36,7 @@ def savings_account(current_user, list_of_card_holders):
 
 
 def transfer_from_savings(current_user, list_of_card_holders):
-    print(Fore.BLUE + Style.BRIGHT + "Transfer from Savings to Main Account" + Style.RESET_ALL)
+    print(Fore.BLUE + Style.BRIGHT + "Transfer from Savings to Spending Account" + Style.RESET_ALL)
 
     print("Choose the currency from which to transfer:")
     print("1. BGN")
@@ -65,7 +65,7 @@ def transfer_from_savings(current_user, list_of_card_holders):
         print(f"Current Savings Account Balance ({currency}): {current_user.get_savings_balance(currency)}")
 
         try:
-            transfer_amount = float(input(f"Enter the amount to transfer from Savings to Main Account in {currency}: "))
+            transfer_amount = float(input(f"Enter the amount to transfer from Savings to Spending Account in {currency}: "))
             if transfer_amount <= 0 or transfer_amount > current_user.get_savings_balance(currency):
                 print(Fore.RED + "Invalid transfer amount. Please enter a valid amount." + Style.RESET_ALL)
                 return
@@ -101,8 +101,8 @@ def transfer_from_savings(current_user, list_of_card_holders):
         save_card_holders_to_json(list_of_card_holders, 'card_holders.json')
 
         print(Fore.GREEN + "Transfer successful!" + Style.RESET_ALL)
-        print(f"Amount transferred to Main Account: {transfer_amount} {currency}")
-        print(f"Main Account Balance: {current_user.get_balance()}")
+        print(f"Amount transferred to Spending Account: {transfer_amount} {currency}")
+        print(f"Spending Account Balance: {current_user.get_balance()}")
         print(f"Savings Account Balance ({currency}): {current_user.get_savings_balance(currency)}")
 
     except ValueError:

@@ -79,7 +79,7 @@ def close_account(current_user, card_holders_list):
     # Ask the user how they want to handle the remaining balance
     print("Choose an option:")
     print("1. Withdraw the remaining balance")
-    print("2. Transfer the remaining balance to another account")
+    print("2. Make a digital will")
 
     try:
         choice = int(input("Enter your choice (1-2): ").strip())
@@ -114,12 +114,12 @@ def close_account(current_user, card_holders_list):
                 return
 
         elif choice == 2:
-            print("Warning: Choosing to transfer will remove all of your money from your account.")
+            print("Warning: Choosing to make a digital will you will transfer all of your money from your account.")
             confirm = input("Are you sure you want to proceed? (yes/no): ").strip().lower()
 
             if confirm == "yes":
                 # Call the transfer_for_closing_account function to handle the transfer
-                transfer_for_closing_account(current_user, card_holders_list)
+                make_digitalWill_for_closing_account(current_user, card_holders_list)
             else:
                 print("Transfer canceled. Account closure canceled.")
                 return
@@ -143,16 +143,16 @@ def close_account(current_user, card_holders_list):
 EXCHANGE_RATES = {'USD': 1.79, 'EUR': 1.96}
 
 
-def print_transfer_for_closing_account_ascii_art():
+def print_make_digitalWill_for_closing_account_ascii_art():
     print(Fore.CYAN + Style.BRIGHT + """
     ****************************************
-            Transfer for Closing Account
+            Make a digital will
     ****************************************
     """ + Style.RESET_ALL)
 
 
-def transfer_for_closing_account(sender, list_of_card_holders):
-    print_transfer_for_closing_account_ascii_art()
+def make_digitalWill_for_closing_account(sender, list_of_card_holders):
+    print_make_digitalWill_for_closing_account_ascii_art()
 
     print("Enter receiver's information:")
     receiver_first_name = input("Receiver's first name: ")
@@ -190,7 +190,7 @@ def transfer_for_closing_account(sender, list_of_card_holders):
     # Add a transaction history entry for the total received
     receiver.add_to_history(f"Received from {sender.get_firstName()} {sender.get_lastName()}", total_amount)
 
-    print(Fore.GREEN + "Transfer successful!" + Style.RESET_ALL)
+    print(Fore.GREEN + "Digital Will successful!" + Style.RESET_ALL)
     print(f"Sender's balance: {sender.get_balance()}")
     print(f"Receiver's balance: {receiver.get_balance()}")
 

@@ -1,52 +1,18 @@
 [
   {
     "spending_account": {
-      "cardNum": "1234567890123456",
-      "pin": 1111,
-      "firstName": "Atanas",
-      "lastName": "Apostolov",
-      "balance": 1318.38
-    },
-    "savings_account": {
-      "balance_bgn": 32.0,
-      "currency_bgn": "BGN",
-      "balance_usd": 12.0,
-      "currency_usd": "USD",
-      "balance_eur": 3.0,
-      "currency_eur": "EUR"
-    }
-  },
-  {
-    "spending_account": {
-      "cardNum": "4434863622048576",
-      "pin": 1111,
-      "firstName": "Dimitar",
-      "lastName": "Bqndov",
-      "balance": 196.0
+      "cardNum": "3777443255917475",
+      "pin": 1562,
+      "firstName": "Galin",
+      "lastName": "Georgiev",
+      "balance": 2305.74
     },
     "savings_account": {
       "balance_bgn": 0.0,
       "currency_bgn": "BGN",
       "balance_usd": 0.0,
       "currency_usd": "USD",
-      "balance_eur": 0.0,
-      "currency_eur": "EUR"
-    }
-  },
-  {
-    "spending_account": {
-      "cardNum": "2567273686249359",
-      "pin": 3333,
-      "firstName": "Tihomir",
-      "lastName": "Apostolov",
-      "balance": 1600.0
-    },
-    "savings_account": {
-      "balance_bgn": 0.0,
-      "currency_bgn": "BGN",
-      "balance_usd": 0.0,
-      "currency_usd": "USD",
-      "balance_eur": 0.0,
+      "balance_eur": 100.0,
       "currency_eur": "EUR"
     }
   }
